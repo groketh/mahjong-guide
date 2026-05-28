@@ -4,13 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Editing & Building
 
-**Edit `source.jsx`** — this is the human-readable JSX source. `index.html` is the compiled artifact served by GitHub Pages; never edit it directly.
+**Edit `source.jsx`** — this is the human-readable JSX source. `index.html` is the compiled artifact served by GitHub Pages; never edit it directly. Both files are committed: GitHub Pages requires `index.html` to be present in the repo since there is no CI build step.
 
 To rebuild after changes:
 
 ```bash
-npm install        # first time only
-npm run build      # runs node build.js → writes index.html
+npm install        # first time only — node_modules/ is gitignored
+npm run build      # runs node build.js → overwrites index.html
 ```
 
 To preview locally:
