@@ -2,19 +2,1112 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>American Mahjong — The Definitive Guide</title>
-<meta name="description" content="The complete guide to American Mah Jongg: tiles, hands, setup, the Charleston, scoring, etiquette, and strategy.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mahjong Monday — Learn American Mah Jongg</title>
+<meta name="description" content="A mobile-first guide to American Mah Jongg: tiles, the Charleston, the NMJL card, and the loop of a turn.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Serif+Display:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-<script src="https://cdn.tailwindcss.com"></script>
 <style>
-  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-  body { margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; }
-  nav::-webkit-scrollbar { display: none; height: 0; }
+/* ============ Mahjong Monday — Midwest kitsch-chic ============ */
+
+:root {
+  /* Palette */
+  --cream:        #FBF3E2;
+  --cream-deep:   #F4E9CF;
+  --cream-card:   #FFFBF1;
+  --ink:          #2A1F1A;
+  --ink-soft:     #5B4A3F;
+  --ink-mute:     #8B7868;
+  --cherry:       #C8252C;
+  --cherry-deep:  #9E1A22;
+  --cherry-soft:  #E8B4B5;
+  --olive:        #5C6B3A;
+  --olive-deep:   #3F4A26;
+  --butter:       #E9B949;
+  --navy:         #1F3050;
+  --line:         #D8C9A6;
+  --line-soft:    rgba(43, 31, 26, 0.10);
+
+  /* Tile suit colors */
+  --suit-bam:     #2E6B3F;
+  --suit-dot:     #2754A8;
+  --suit-crak:    #1A1612;
+  --suit-red:     #B41E24;
+
+  /* Type */
+  --hand:    "Caveat", "Bradley Hand", cursive;
+  --display: "DM Serif Display", "Hoefler Text", Georgia, serif;
+  --body:    "Newsreader", "Iowan Old Style", Georgia, serif;
+  --mono:    "DM Mono", ui-monospace, "SF Mono", monospace;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--body);
+  color: var(--ink);
+  background: var(--cream);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+/* ============ Gingham background pattern ============ */
+.gingham {
+  background-color: var(--cherry);
+  background-image:
+    linear-gradient(90deg, rgba(255,255,255,0.55) 50%, transparent 50%),
+    linear-gradient(0deg,  rgba(255,255,255,0.55) 50%, transparent 50%);
+  background-size: 16px 16px, 16px 16px;
+}
+.gingham-soft {
+  background-color: var(--cream);
+  background-image:
+    linear-gradient(90deg, rgba(200,37,44,0.18) 50%, transparent 50%),
+    linear-gradient(0deg,  rgba(200,37,44,0.18) 50%, transparent 50%);
+  background-size: 14px 14px, 14px 14px;
+}
+.gingham-tiny {
+  background-color: var(--cream);
+  background-image:
+    linear-gradient(90deg, rgba(200,37,44,0.22) 50%, transparent 50%),
+    linear-gradient(0deg,  rgba(200,37,44,0.22) 50%, transparent 50%);
+  background-size: 6px 6px, 6px 6px;
+}
+.dots {
+  background-image: radial-gradient(var(--ink) 1px, transparent 1.5px);
+  background-size: 14px 14px;
+  background-color: var(--cream);
+}
+
+/* ============ App shell (mobile-first) ============ */
+.app {
+  min-height: 100vh;
+  min-height: 100dvh;
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--cream);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 0 1px var(--line-soft);
+}
+@media (min-width: 720px) {
+  body { background: #EFE4C9; }
+  .app { box-shadow: 0 30px 80px rgba(31, 22, 18, 0.18), 0 0 0 1px var(--line); margin-top: 24px; margin-bottom: 24px; border-radius: 6px; overflow: hidden; }
+}
+
+.app-header {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--line);
+  background: var(--cream);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.app-header .mark {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+}
+.app-header .mark .hand {
+  font-family: var(--hand);
+  font-size: 30px;
+  line-height: 0.9;
+  color: var(--cherry);
+  transform: rotate(-3deg);
+  transform-origin: left center;
+}
+.app-header .mark .sub {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.app-header .crest {
+  width: 36px; height: 36px;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  display: grid; place-items: center;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--ink);
+  background: var(--cream-card);
+}
+
+.section-bar {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--line);
+  background: var(--cream);
+  position: sticky;
+  top: 71px;
+  z-index: 9;
+}
+.section-bar::-webkit-scrollbar { display: none; }
+.section-bar .seg {
+  flex-shrink: 0;
+  padding: 12px 14px 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  position: relative;
+  transition: color 120ms ease;
+}
+.section-bar .seg:first-child { padding-left: 20px; }
+.section-bar .seg:last-child { padding-right: 20px; }
+.section-bar .seg.active {
+  color: var(--cherry);
+  border-bottom-color: var(--cherry);
+}
+.section-bar .seg .num {
+  display: block;
+  font-size: 9px;
+  opacity: 0.6;
+  margin-bottom: 2px;
+}
+
+.main {
+  flex: 1;
+  padding: 24px 20px 120px;
+  min-height: 0;
+}
+
+/* ============ Bottom tab nav ============ */
+.tabbar {
+  position: sticky;
+  bottom: 0;
+  background: var(--cream);
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 8px 0 14px;
+  z-index: 11;
+}
+.tab {
+  background: none;
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 0 4px;
+  cursor: pointer;
+  color: var(--ink-mute);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.tab.active { color: var(--cherry); }
+.tab .glyph {
+  width: 22px; height: 22px;
+  display: grid; place-items: center;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 18px;
+}
+.tab .glyph svg { width: 22px; height: 22px; }
+
+/* ============ Typography ============ */
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cherry);
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow::before {
+  content: "";
+  width: 24px;
+  height: 1px;
+  background: var(--cherry);
+}
+.eyebrow.no-rule::before { display: none; }
+
+h1.title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 44px;
+  line-height: 1.0;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0 0 18px;
+}
+h1.title .hand {
+  font-family: var(--hand);
+  font-weight: 700;
+  color: var(--cherry);
+  font-size: 56px;
+  display: inline-block;
+  transform: rotate(-2deg);
+  margin-right: 4px;
+}
+h2.section-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.1;
+  margin: 0 0 14px;
+  color: var(--ink);
+}
+h3.sub-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 20px;
+  margin: 24px 0 10px;
+  color: var(--ink);
+}
+p { margin: 0 0 14px; color: var(--ink-soft); }
+p strong { color: var(--ink); font-weight: 600; }
+.lede { font-size: 17px; line-height: 1.5; color: var(--ink); }
+.kicker {
+  font-family: var(--hand);
+  color: var(--cherry);
+  font-size: 28px;
+  line-height: 1;
+  transform: rotate(-2deg);
+  display: inline-block;
+}
+
+a, .link { color: var(--cherry); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ============ Cards & callouts ============ */
+.card {
+  background: var(--cream-card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 18px 18px;
+  margin: 0 0 16px;
+}
+.card.tight { padding: 14px 16px; }
+.card .card-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin: 0 0 6px;
+}
+.card h4 {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 400;
+  margin: 0 0 8px;
+  color: var(--ink);
+}
+.callout {
+  border: 1px solid var(--cherry);
+  background: #FCEDED;
+  border-radius: 4px;
+  padding: 14px 16px;
+  margin: 0 0 16px;
+  position: relative;
+}
+.callout .tag {
+  font-family: var(--hand);
+  color: var(--cherry);
+  font-size: 24px;
+  line-height: 1;
+  margin-bottom: 4px;
+  display: block;
+  transform: rotate(-2deg);
+}
+.callout p { color: var(--ink); margin: 0; }
+
+.divider {
+  height: 1px;
+  background: var(--line);
+  margin: 24px 0;
+  border: 0;
+}
+.divider.deco {
+  height: 14px;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--cherry);
+  font-family: var(--display);
+  font-style: italic;
+}
+.divider.deco::before, .divider.deco::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+/* ============ Buttons & chips ============ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: var(--ink);
+  color: var(--cream);
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: transform 80ms ease, background 120ms ease;
+  text-decoration: none;
+}
+.btn:active { transform: translateY(1px); }
+.btn.primary { background: var(--cherry); border-color: var(--cherry); }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.small { padding: 8px 12px; font-size: 10px; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  background: var(--cream-card);
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.chip.active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+
+/* ============ Tiles ============ */
+.tile {
+  --tile-w: 52px;
+  --tile-h: 70px;
+  width: var(--tile-w);
+  height: var(--tile-h);
+  background: #FFFBEF;
+  border: 1px solid #C9B98A;
+  border-bottom: 3px solid #9C8A5A;
+  border-right: 2px solid #B5A271;
+  border-radius: 8px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  flex-shrink: 0;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+  user-select: none;
+}
+.tile.sm  { --tile-w: 40px; --tile-h: 54px; border-radius: 6px; }
+.tile.xs  { --tile-w: 30px; --tile-h: 40px; border-radius: 5px; }
+.tile.lg  { --tile-w: 72px; --tile-h: 96px; border-radius: 10px; }
+.tile.xl  { --tile-w: 96px; --tile-h: 128px; border-radius: 12px; }
+
+.tile .num {
+  font-size: 26px;
+  line-height: 1;
+  font-weight: 400;
+  color: var(--ink);
+}
+.tile .label {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 4px;
+  color: var(--ink-mute);
+}
+.tile.sm .num { font-size: 20px; }
+.tile.sm .label { font-size: 7px; }
+.tile.xs .num { font-size: 14px; }
+.tile.xs .label { font-size: 6px; margin-top: 2px; letter-spacing: 0.08em; }
+.tile.lg .num { font-size: 36px; }
+.tile.lg .label { font-size: 10px; margin-top: 6px; }
+.tile.xl .num { font-size: 52px; }
+.tile.xl .label { font-size: 12px; margin-top: 8px; }
+
+.tile[data-suit="bam"] .num   { color: var(--suit-bam); }
+.tile[data-suit="dot"] .num   { color: var(--suit-dot); }
+.tile[data-suit="crak"] .num  { color: var(--suit-crak); }
+.tile[data-suit="wind"] .num  { color: var(--suit-crak); }
+.tile[data-suit="dragR"] .num { color: var(--suit-red); }
+.tile[data-suit="dragG"] .num { color: var(--suit-bam); }
+.tile[data-suit="dragW"] .num { color: var(--suit-dot); font-family: var(--mono); font-size: 18px; letter-spacing: 0.05em; }
+.tile[data-suit="flower"] .num { color: var(--cherry); font-family: var(--hand); font-weight: 700; }
+.tile[data-suit="joker"] { background: linear-gradient(135deg, #FFFBEF 50%, #FFEAB5 50%); }
+.tile[data-suit="joker"] .num { color: var(--cherry); font-size: 22px; }
+
+.tile.face-down {
+  background: var(--olive);
+  border-color: var(--olive-deep);
+  border-bottom-color: #1F2A14;
+  border-right-color: #2E3919;
+}
+.tile.face-down::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(251, 243, 226, 0.25);
+  border-radius: 4px;
+}
+.tile.face-down::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(251, 243, 226, 0.18) 0, rgba(251, 243, 226, 0.18) 2px, transparent 2.5px),
+    radial-gradient(circle at 25% 25%, rgba(251, 243, 226, 0.10) 0, rgba(251, 243, 226, 0.10) 1.5px, transparent 2px),
+    radial-gradient(circle at 75% 75%, rgba(251, 243, 226, 0.10) 0, rgba(251, 243, 226, 0.10) 1.5px, transparent 2px);
+  background-size: 16px 16px;
+}
+
+.tile.selected {
+  outline: 2px solid var(--cherry);
+  outline-offset: 2px;
+  transform: translateY(-4px);
+}
+.tile.dim { opacity: 0.32; }
+.tile.lift { transform: translateY(-6px); transition: transform 200ms; }
+
+.tile-rack {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+/* ============ Charleston board ============ */
+.cville {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: var(--cream-card);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.cville .felt {
+  position: absolute;
+  inset: 14%;
+  background: var(--olive);
+  border-radius: 4px;
+  box-shadow: inset 0 0 0 1px var(--olive-deep), inset 0 0 30px rgba(0,0,0,0.25);
+}
+.cville .seat {
+  position: absolute;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--cream);
+  border: 1px solid var(--line);
+  padding: 5px 9px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+.cville .seat .you {
+  display: block;
+  font-family: var(--hand);
+  color: var(--cherry);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 18px;
+  line-height: 1;
+  margin-top: 2px;
+}
+.cville .seat.n { top: 4px; left: 50%; transform: translateX(-50%); }
+.cville .seat.e { right: 8px; top: 50%; transform: translateY(-50%); text-align: right; }
+.cville .seat.s { bottom: 4px; left: 50%; transform: translateX(-50%); }
+.cville .seat.w { left: 8px; top: 50%; transform: translateY(-50%); }
+
+.cville .arrow {
+  position: absolute;
+  stroke: var(--cherry);
+  stroke-width: 2.5;
+  fill: none;
+  filter: drop-shadow(0 1px 0 rgba(255,255,255,0.5));
+}
+
+.cville .step-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: var(--cream);
+  font-family: var(--hand);
+  font-size: 36px;
+  line-height: 1;
+  pointer-events: none;
+}
+.cville .step-label .meta {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cream-deep);
+  display: block;
+  margin-top: 4px;
+}
+
+/* ============ Card line viewer ============ */
+.cardline {
+  background: var(--cream-card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 18px 14px;
+  margin: 0 0 16px;
+  position: relative;
+}
+.cardline .head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.cardline .hand-line {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-family: var(--display);
+  font-size: 22px;
+  color: var(--ink);
+  flex-wrap: wrap;
+  letter-spacing: 0.04em;
+}
+.cardline .group {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 120ms ease, transform 80ms;
+  letter-spacing: 0.04em;
+}
+.cardline .group:hover { background: var(--cream-deep); }
+.cardline .group.active { background: var(--cherry); color: var(--cream); }
+.cardline .group.active .glyph { color: var(--cream); }
+.cardline .glyph {
+  font-family: var(--display);
+}
+.cardline .glyph[data-color="bam"]  { color: var(--suit-bam); }
+.cardline .glyph[data-color="dot"]  { color: var(--suit-dot); }
+.cardline .glyph[data-color="crak"] { color: var(--suit-crak); }
+.cardline .glyph[data-color="red"]  { color: var(--suit-red); }
+
+.cardline .footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.cardline .footer .pay {
+  color: var(--cherry);
+  font-family: var(--display);
+  font-size: 16px;
+  letter-spacing: 0;
+  text-transform: none;
+  font-style: italic;
+}
+
+.cardline-help {
+  background: var(--cream-deep);
+  border: 1px dashed var(--cherry);
+  border-radius: 4px;
+  padding: 12px 14px;
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--ink);
+  min-height: 60px;
+}
+.cardline-help .h {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cherry);
+  margin-bottom: 4px;
+}
+
+/* ============ Turn simulator ============ */
+.sim-table {
+  background: var(--olive);
+  border-radius: 6px;
+  padding: 18px 12px;
+  color: var(--cream);
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.sim-table::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,0.06), transparent 65%);
+  pointer-events: none;
+}
+.sim-rack-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cream-deep);
+  margin-bottom: 6px;
+}
+.sim-rack { display: flex; gap: 3px; flex-wrap: wrap; }
+.sim-center {
+  margin: 14px 0;
+  background: rgba(0,0,0,0.18);
+  border: 1px dashed rgba(251, 243, 226, 0.25);
+  border-radius: 4px;
+  padding: 12px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.sim-center .discard-pile { display: flex; gap: 3px; }
+.sim-center .label {
+  font-family: var(--hand);
+  font-size: 18px;
+  color: var(--cream);
+  transform: rotate(-2deg);
+  line-height: 1;
+}
+
+.sim-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.sim-actions .btn { flex: 1; min-width: 100px; }
+
+.sim-step {
+  background: var(--cream-card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 14px 14px;
+  margin-bottom: 12px;
+}
+.sim-step .num {
+  font-family: var(--hand);
+  color: var(--cherry);
+  font-size: 32px;
+  line-height: 1;
+  transform: rotate(-3deg);
+  display: inline-block;
+}
+.sim-step h5 {
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 400;
+  margin: 6px 0 8px;
+}
+.sim-step p { margin: 0; font-size: 14px; }
+
+/* ============ Hand builder ============ */
+.builder-tray {
+  background: var(--cream-card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 12px;
+  margin-bottom: 12px;
+  min-height: 80px;
+}
+.builder-tray .empty {
+  font-family: var(--hand);
+  color: var(--ink-mute);
+  font-size: 22px;
+  text-align: center;
+  padding: 12px 0;
+  transform: rotate(-1deg);
+}
+.builder-palette {
+  background: var(--cream-deep);
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 12px;
+}
+.builder-palette .pal-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: 8px;
+}
+.builder-palette .scroll {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding-bottom: 4px;
+}
+.builder-palette .scroll::-webkit-scrollbar { height: 4px; }
+.builder-palette .scroll::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+
+.builder-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: 6px;
+}
+.builder-meta .count {
+  font-family: var(--display);
+  font-size: 18px;
+  color: var(--ink);
+  letter-spacing: 0;
+}
+.builder-meta .count strong { color: var(--cherry); }
+
+/* ============ Flashcard ============ */
+.flash-wrap { margin-bottom: 16px; }
+.flashcard {
+  position: relative;
+  width: 100%;
+  min-height: 240px;
+  cursor: pointer;
+}
+.flash-face {
+  position: relative;
+  width: 100%;
+  min-height: 240px;
+  background: var(--cream-card);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  animation: cardIn 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.flash-face.back { background: var(--cream-deep); border-color: var(--cherry); }
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.flash-face .q-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cherry);
+  margin-bottom: 14px;
+}
+.flash-face .q-prompt {
+  font-family: var(--display);
+  font-size: 22px;
+  line-height: 1.2;
+  color: var(--ink);
+  margin: 0;
+}
+.flash-face .q-answer {
+  font-family: var(--display);
+  font-size: 24px;
+  line-height: 1.2;
+  color: var(--ink);
+  margin: 0 0 10px;
+}
+.flash-face .q-detail { font-size: 14px; color: var(--ink-soft); margin: 0; }
+.flash-face .flip-hint {
+  position: absolute; bottom: 12px;
+  font-family: var(--hand); color: var(--cherry);
+  font-size: 18px; transform: rotate(-2deg);
+}
+.flash-controls {
+  display: flex;
+  gap: 8px;
+}
+.flash-controls .btn { flex: 1; }
+
+/* ============ Lists & misc ============ */
+ul.clean { list-style: none; padding: 0; margin: 0 0 14px; }
+ul.clean li {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+ul.clean li:last-child { border-bottom: 0; }
+ul.clean li .num {
+  font-family: var(--display);
+  font-style: italic;
+  color: var(--cherry);
+  font-size: 22px;
+  line-height: 1;
+  min-width: 28px;
+}
+ul.clean li .body { flex: 1; }
+ul.clean li .body strong {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 17px;
+  display: block;
+  margin-bottom: 2px;
+  color: var(--ink);
+}
+ul.clean li .body p { font-size: 14px; margin: 0; }
+
+.do-dont {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.do-dont .col {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 14px 14px;
+  background: var(--cream-card);
+}
+.do-dont .col.do { border-color: var(--olive); }
+.do-dont .col.dont { border-color: var(--cherry); }
+.do-dont .col h5 {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin: 0 0 10px;
+}
+.do-dont .col.do h5 { color: var(--olive); }
+.do-dont .col.dont h5 { color: var(--cherry); }
+.do-dont ul { padding-left: 0; list-style: none; margin: 0; }
+.do-dont li { font-size: 14px; padding: 6px 0; border-bottom: 1px dashed var(--line); color: var(--ink-soft); }
+.do-dont li:last-child { border-bottom: 0; }
+.do-dont li::before {
+  display: inline-block;
+  margin-right: 8px;
+  font-family: var(--mono);
+  font-weight: 700;
+  width: 10px;
+}
+.do-dont .do li::before { content: "✓"; color: var(--olive); }
+.do-dont .dont li::before { content: "×"; color: var(--cherry); }
+
+/* ============ Sheet (modal-like) for tile identifier ============ */
+.sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(31, 22, 18, 0.45);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 50;
+  animation: fade 180ms ease;
+}
+.sheet {
+  background: var(--cream-card);
+  width: 100%;
+  max-width: 480px;
+  border-radius: 12px 12px 0 0;
+  padding: 22px 22px 30px;
+  border-top: 4px solid var(--cherry);
+  animation: slideUp 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.sheet .grip { width: 36px; height: 4px; background: var(--line); border-radius: 999px; margin: -10px auto 14px; }
+.sheet .sheet-tile-row { display: flex; gap: 16px; align-items: flex-start; }
+.sheet .sheet-tile-row .meta { flex: 1; }
+.sheet .sheet-tile-row .meta .name {
+  font-family: var(--display);
+  font-size: 24px;
+  margin: 0 0 4px;
+}
+.sheet .sheet-tile-row .meta .called {
+  font-family: var(--hand);
+  color: var(--cherry);
+  font-size: 22px;
+  transform: rotate(-2deg);
+  display: inline-block;
+  margin-bottom: 8px;
+}
+.sheet .sheet-tile-row .meta p { font-size: 14px; margin: 0 0 6px; }
+.sheet .sheet-meta-row {
+  display: flex;
+  gap: 14px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.sheet .sheet-meta-row .v {
+  font-family: var(--display);
+  letter-spacing: 0;
+  font-size: 14px;
+  text-transform: none;
+  color: var(--ink);
+  display: block;
+}
+
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+/* ============ Tiles grid (for ID screen) ============ */
+.tiles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.tiles-grid .tile { width: 100%; --tile-w: auto; }
+
+.suit-block { margin-bottom: 20px; }
+.suit-block .suit-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+.suit-block .suit-head h3 {
+  font-family: var(--display);
+  font-size: 18px;
+  margin: 0;
+  font-weight: 400;
+}
+.suit-block .suit-head .meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+/* ============ Cheat sheet ============ */
+.cheat-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+.cheat-card {
+  background: var(--cream-card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 14px 14px;
+}
+.cheat-card .num {
+  font-family: var(--hand);
+  color: var(--cherry);
+  font-size: 32px;
+  line-height: 0.9;
+  transform: rotate(-2deg);
+  display: inline-block;
+  margin-bottom: 4px;
+}
+.cheat-card h5 {
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 400;
+  margin: 0 0 4px;
+}
+.cheat-card p { font-size: 14px; margin: 0; }
+
+/* ============ Hero ============ */
+.hero {
+  position: relative;
+  padding: 22px 0 8px;
+}
+.hero .stamp {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-family: var(--hand);
+  color: var(--cherry);
+  font-size: 22px;
+  transform: rotate(8deg);
+  border: 2px solid var(--cherry);
+  padding: 4px 10px;
+  border-radius: 4px;
+  line-height: 1;
+}
+.hero .hero-tiles {
+  display: flex;
+  gap: 4px;
+  margin: 18px 0 10px;
+  justify-content: center;
+}
+.hero .hero-tiles .tile { transform: rotate(var(--r, 0deg)); }
+.hero .hero-tiles .tile:nth-child(1) { --r: -4deg; }
+.hero .hero-tiles .tile:nth-child(2) { --r: 2deg; }
+.hero .hero-tiles .tile:nth-child(3) { --r: -1deg; }
+.hero .hero-tiles .tile:nth-child(4) { --r: 3deg; }
+.hero .hero-tiles .tile:nth-child(5) { --r: -2deg; }
+
+.tile-row-bg {
+  margin: 0 -20px 0;
+  padding: 14px 20px;
+  background: var(--gingham-soft, transparent);
+  border-block: 1px solid var(--line);
+}
+
+/* tiny progress dots for charleston */
+.step-dots {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin: 10px 0 16px;
+}
+.step-dots .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--line);
+  border: 1px solid var(--line);
+  cursor: pointer;
+}
+.step-dots .dot.active { background: var(--cherry); border-color: var(--cherry); }
+.step-dots .dot.done { background: var(--cream); border-color: var(--cherry); }
+
+/* responsive cheat grid */
+@media (min-width: 420px) {
+  .cheat-grid { grid-template-columns: 1fr 1fr; }
+  .do-dont { grid-template-columns: 1fr 1fr; }
+}
+
 </style>
 </head>
 <body>
@@ -22,562 +1115,1757 @@
 <script>
   const {
     useState,
-    useEffect
+    useEffect,
+    useRef,
+    useMemo
   } = React;
-  function AmericanMahjongGuide() {
-    const [progress, setProgress] = useState(0);
-    const [activeSection, setActiveSection] = useState('overview');
+  
+  // ─── DATA ────────────────────────────────────────────────────────────────────
+  
+  const TILES = {
+    bams: Array.from({
+      length: 9
+    }, (_, i) => ({
+      id: `bam${i + 1}`,
+      suit: 'bam',
+      face: String(i + 1),
+      label: 'Bam',
+      name: `${i + 1} Bam`,
+      called: `"${i + 1} Bam"`,
+      note: 'Bams are the "bamboo" suit. Tiles 2–9 traditionally show bamboo sticks; the 1 Bam is a bird.',
+      count: 4
+    })),
+    dots: Array.from({
+      length: 9
+    }, (_, i) => ({
+      id: `dot${i + 1}`,
+      suit: 'dot',
+      face: String(i + 1),
+      label: 'Dot',
+      name: `${i + 1} Dot`,
+      called: `"${i + 1} Dot"`,
+      note: 'Dots (or "circles") are clusters of round coins.',
+      count: 4
+    })),
+    craks: Array.from({
+      length: 9
+    }, (_, i) => ({
+      id: `crak${i + 1}`,
+      suit: 'crak',
+      face: String(i + 1),
+      label: 'Crak',
+      name: `${i + 1} Crak`,
+      called: `"${i + 1} Crak"`,
+      note: 'Craks (Characters) show a Chinese numeral above the symbol "万" (ten thousand).',
+      count: 4
+    })),
+    winds: [{
+      id: 'N',
+      suit: 'wind',
+      face: 'N',
+      label: 'North',
+      name: 'North Wind',
+      called: '"North"',
+      note: 'One of the four wind tiles — N, E, S, W.',
+      count: 4
+    }, {
+      id: 'E',
+      suit: 'wind',
+      face: 'E',
+      label: 'East',
+      name: 'East Wind',
+      called: '"East"',
+      note: "East is the dealer's wind and the starting seat.",
+      count: 4
+    }, {
+      id: 'S',
+      suit: 'wind',
+      face: 'S',
+      label: 'South',
+      name: 'South Wind',
+      called: '"South"',
+      note: 'One of the four wind tiles — N, E, S, W.',
+      count: 4
+    }, {
+      id: 'W',
+      suit: 'wind',
+      face: 'W',
+      label: 'West',
+      name: 'West Wind',
+      called: '"West"',
+      note: 'One of the four wind tiles — N, E, S, W.',
+      count: 4
+    }],
+    dragons: [{
+      id: 'DR',
+      suit: 'dragR',
+      face: 'R',
+      label: 'Drag',
+      name: 'Red Dragon',
+      called: '"Red"',
+      note: 'Pairs with Craks in the NMJL card. Often shown as "中".',
+      count: 4
+    }, {
+      id: 'DG',
+      suit: 'dragG',
+      face: 'G',
+      label: 'Drag',
+      name: 'Green Dragon',
+      called: '"Green"',
+      note: 'Pairs with Bams in the NMJL card. Often shown as "發".',
+      count: 4
+    }, {
+      id: 'DW',
+      suit: 'dragW',
+      face: '0',
+      label: 'Soap',
+      name: 'White Dragon',
+      called: '"Soap"',
+      note: 'Pairs with Dots in the NMJL card. Called "soap" — looks like a blank tile or shows "0".',
+      count: 4
+    }],
+    flowers: [{
+      id: 'F',
+      suit: 'flower',
+      face: '✿',
+      label: 'Flwr',
+      name: 'Flower',
+      called: '"Flower"',
+      note: 'All 8 flowers are interchangeable in American Mah Jongg. Used in many hands as a group.',
+      count: 8
+    }],
+    jokers: [{
+      id: 'J',
+      suit: 'joker',
+      face: '★',
+      label: 'Joker',
+      name: 'Joker',
+      called: '"Joker"',
+      note: 'A wild card — but ONLY for groups of 3 or more matching tiles (pungs, kongs, etc). Never for pairs or singles.',
+      count: 8
+    }]
+  };
+  const ALL_TILES = [...TILES.bams, ...TILES.dots, ...TILES.craks, ...TILES.winds, ...TILES.dragons, ...TILES.flowers, ...TILES.jokers];
+  const CHARLESTON_STEPS = [{
+    name: 'Right',
+    pass: 'right',
+    required: true,
+    caption: 'Pass 3 tiles right.'
+  }, {
+    name: 'Across',
+    pass: 'across',
+    required: true,
+    caption: 'Pass 3 tiles across.'
+  }, {
+    name: 'Left',
+    pass: 'left',
+    required: true,
+    caption: 'Pass 3 tiles left.'
+  }, {
+    name: 'Courtesy',
+    pass: 'stop',
+    required: false,
+    caption: 'STOP — table decides whether to continue.'
+  }, {
+    name: 'Left',
+    pass: 'left',
+    required: false,
+    caption: 'Second Charleston: left.'
+  }, {
+    name: 'Across',
+    pass: 'across',
+    required: false,
+    caption: 'Second Charleston: across.'
+  }, {
+    name: 'Right',
+    pass: 'right',
+    required: false,
+    caption: 'Second Charleston: right.'
+  }];
+  const TURN_STEPS = [{
+    title: 'Previous player discards.',
+    body: 'The player to your right just discarded a tile face-up in the middle, calling out its name — say, "3 Bam."',
+    action: 'discard',
+    tile: {
+      id: 'bam3',
+      suit: 'bam',
+      face: '3',
+      label: 'Bam'
+    }
+  }, {
+    title: 'You have a choice — call or wait.',
+    body: "If that tile completes a group you're collecting (a pair, pung, etc.), you can CALL it. Otherwise, wait for your turn.",
+    action: 'call?'
+  }, {
+    title: 'No call — you draw.',
+    body: 'On your turn you pick the next tile from the wall (the row of face-down tiles). You now have 14 tiles, one more than you need.',
+    action: 'draw'
+  }, {
+    title: 'Look at your hand.',
+    body: "Compare what you drew with the hand you're building toward on the NMJL card. Decide what to keep and what to discard.",
+    action: 'think'
+  }, {
+    title: 'Discard one tile, face-up.',
+    body: "Place the tile in the middle of the table, face-up, and clearly name it aloud. You're back to 13 tiles. Play passes to your left.",
+    action: 'discard',
+    tile: {
+      id: 'dot5',
+      suit: 'dot',
+      face: '5',
+      label: 'Dot'
+    }
+  }, {
+    title: "That's a turn.",
+    body: 'Every turn is the same loop: someone discards → optional call → draw → discard. Repeat until someone declares "Mah Jongg!"',
+    action: 'done'
+  }];
+  const CARD_LINE = {
+    category: '2025 — Like Numbers',
+    number: 'Line 3',
+    groups: [{
+      type: 'kong',
+      label: 'FFFF',
+      color: 'red',
+      explain: 'Kong of Flowers — any 4 Flower tiles. All Flowers are interchangeable.'
+    }, {
+      type: 'pung',
+      label: '222',
+      color: 'bam',
+      explain: 'Pung of 2 Bams — three identical 2 Bam tiles.'
+    }, {
+      type: 'pung',
+      label: '222',
+      color: 'dot',
+      explain: 'Pung of 2 Dots — three identical 2 Dot tiles, in a DIFFERENT suit from the bams.'
+    }, {
+      type: 'kong',
+      label: '2222',
+      color: 'crak',
+      explain: 'Kong of 2 Craks — four identical 2 Crak tiles, in the THIRD suit.'
+    }],
+    notes: 'The "Like Numbers" section means every numbered group uses the SAME number (here, all 2s). The suits must all be DIFFERENT — bams, dots, and craks. You can use jokers in the pungs and kong (groups of 3+) but never for flowers.',
+    exposed: '25¢',
+    concealed: '50¢'
+  };
+  const QUIZ = [{
+    q: 'How many tiles does each player hold during play?',
+    a: '13 tiles',
+    detail: 'You draw a 14th tile on your turn, then discard one — back to 13.'
+  }, {
+    q: 'How many players make a standard game?',
+    a: 'Four',
+    detail: 'Three is also playable, with one extra discard pile (the "Charleston" changes).'
+  }, {
+    q: 'What is a "Pung"?',
+    a: 'Three of the same tile',
+    detail: 'E.g. three 5 Dots. Jokers may substitute.'
+  }, {
+    q: 'What is a "Kong"?',
+    a: 'Four of the same tile',
+    detail: 'E.g. four East winds. Jokers may substitute.'
+  }, {
+    q: 'What is a "Quint"?',
+    a: 'Five of the same tile',
+    detail: 'Only possible in American Mah Jongg, using jokers for the extras.'
+  }, {
+    q: 'Can a Joker stand in for a single tile or a pair?',
+    a: 'No — never',
+    detail: 'Jokers ONLY work in groups of 3 or more matching tiles.'
+  }, {
+    q: 'What does the White Dragon look like?',
+    a: 'A blank tile or "0" — called "Soap"',
+    detail: 'It pairs with Dots in the card.'
+  }, {
+    q: 'How many Flower tiles are in the set?',
+    a: 'Eight',
+    detail: "All 8 are interchangeable — they're treated as identical."
+  }, {
+    q: 'Who passes first in the Charleston?',
+    a: 'Everyone, simultaneously — 3 tiles to the right',
+    detail: 'Then across, then left.'
+  }, {
+    q: 'What tile is colloquially called "Soap"?',
+    a: 'The White Dragon',
+    detail: 'Looks blank — or shows a "0" — because the original tiles depicted a stack of soap.'
+  }, {
+    q: 'How do you win?',
+    a: 'Match an exact hand on the current NMJL card',
+    detail: 'You must declare "Mah Jongg" — and your tiles must match a single line exactly.'
+  }];
+  const GLOSSARY = [{
+    term: 'Bettor',
+    def: 'A fifth player who sits out a hand and bets on who will win.'
+  }, {
+    term: 'Charleston',
+    def: 'The opening tile-passing ritual: right, across, left — and then maybe again.'
+  }, {
+    term: 'Discard',
+    def: 'A tile thrown face-up in the middle of the table.'
+  }, {
+    term: 'East',
+    def: 'The dealer; the player who starts each game.'
+  }, {
+    term: 'Exposed',
+    def: 'A group of tiles shown face-up on your rack after a call.'
+  }, {
+    term: 'Joker',
+    def: 'Wild tile — usable only in groups of 3+ matching tiles.'
+  }, {
+    term: 'Kong',
+    def: 'A group of 4 matching tiles.'
+  }, {
+    term: 'Pair',
+    def: 'Two identical tiles. Jokers NOT allowed.'
+  }, {
+    term: 'Pung',
+    def: 'A group of 3 matching tiles.'
+  }, {
+    term: 'Quint',
+    def: 'A group of 5 matching tiles (needs jokers).'
+  }, {
+    term: 'Rack',
+    def: 'The tile holder in front of you. Has a public top edge and a hidden inside edge.'
+  }, {
+    term: 'Soap',
+    def: 'Slang for the White Dragon.'
+  }, {
+    term: 'Wall',
+    def: 'The face-down row of tiles you draw from.'
+  }];
+  
+  // ─── SHARED COMPONENTS ───────────────────────────────────────────────────────
+  
+  function suitName(s) {
+    return {
+      bam: 'Bams (Bamboo)',
+      dot: 'Dots (Circles)',
+      crak: 'Craks (Characters)',
+      wind: 'Winds',
+      dragR: 'Red Dragon',
+      dragG: 'Green Dragon',
+      dragW: 'White Dragon',
+      flower: 'Flowers',
+      joker: 'Jokers'
+    }[s] || s;
+  }
+  function Tile({
+    tile,
+    size,
+    selected,
+    dim,
+    onClick,
+    faceDown,
+    ariaLabel
+  }) {
+    if (faceDown) return /*#__PURE__*/React.createElement("div", {
+      className: `tile face-down ${size || ''}`,
+      "aria-hidden": "true"
+    });
+    if (!tile) return null;
+    const cls = `tile ${size || ''} ${selected ? 'selected' : ''} ${dim ? 'dim' : ''}`.trim();
+    return /*#__PURE__*/React.createElement("div", {
+      className: cls,
+      "data-suit": tile.suit,
+      onClick: onClick,
+      role: onClick ? 'button' : undefined,
+      tabIndex: onClick ? 0 : undefined,
+      "aria-label": ariaLabel || tile.name || tile.id
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "num"
+    }, tile.face), tile.label ? /*#__PURE__*/React.createElement("div", {
+      className: "label"
+    }, tile.label) : null);
+  }
+  function Eyebrow({
+    children,
+    noRule
+  }) {
+    return /*#__PURE__*/React.createElement("div", {
+      className: `eyebrow ${noRule ? 'no-rule' : ''}`
+    }, children);
+  }
+  function Callout({
+    tag,
+    children
+  }) {
+    return /*#__PURE__*/React.createElement("div", {
+      className: "callout"
+    }, tag ? /*#__PURE__*/React.createElement("span", {
+      className: "tag"
+    }, tag) : null, typeof children === 'string' ? /*#__PURE__*/React.createElement("p", null, children) : children);
+  }
+  function Divider({
+    deco,
+    children
+  }) {
+    if (deco) return /*#__PURE__*/React.createElement("div", {
+      className: "divider deco"
+    }, children || '✦');
+    return /*#__PURE__*/React.createElement("hr", {
+      className: "divider"
+    });
+  }
+  function TileSheet({
+    tile,
+    onClose
+  }) {
     useEffect(() => {
-      const handleScroll = () => {
-        const scrollTop = window.scrollY;
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        const pct = docHeight > 0 ? scrollTop / docHeight * 100 : 0;
-        setProgress(pct);
-        const ids = ['overview', 'tiles', 'setup', 'gameplay', 'card', 'winning', 'etiquette', 'strategy'];
-        for (let i = ids.length - 1; i >= 0; i--) {
-          const el = document.getElementById(ids[i]);
-          if (el && el.getBoundingClientRect().top <= 120) {
-            setActiveSection(ids[i]);
-            break;
+      function onEsc(e) {
+        if (e.key === 'Escape') onClose();
+      }
+      window.addEventListener('keydown', onEsc);
+      return () => window.removeEventListener('keydown', onEsc);
+    }, [onClose]);
+    if (!tile) return null;
+    return /*#__PURE__*/React.createElement("div", {
+      className: "sheet-overlay",
+      onClick: onClose
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "sheet",
+      onClick: e => e.stopPropagation()
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "grip"
+    }), /*#__PURE__*/React.createElement("div", {
+      className: "sheet-tile-row"
+    }, /*#__PURE__*/React.createElement(Tile, {
+      tile: tile,
+      size: "lg"
+    }), /*#__PURE__*/React.createElement("div", {
+      className: "meta"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "name"
+    }, tile.name), /*#__PURE__*/React.createElement("div", {
+      className: "called"
+    }, "called ", tile.called), /*#__PURE__*/React.createElement("p", null, tile.note))), /*#__PURE__*/React.createElement("div", {
+      className: "sheet-meta-row"
+    }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", null, "In the set"), /*#__PURE__*/React.createElement("span", {
+      className: "v"
+    }, tile.count, " tile", tile.count > 1 ? 's' : '')), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", null, "Suit"), /*#__PURE__*/React.createElement("span", {
+      className: "v"
+    }, suitName(tile.suit))))));
+  }
+  function TabIcon({
+    name
+  }) {
+    const s = 'currentColor';
+    if (name === 'learn') return /*#__PURE__*/React.createElement("svg", {
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: s,
+      strokeWidth: "1.6",
+      strokeLinecap: "round",
+      strokeLinejoin: "round"
+    }, /*#__PURE__*/React.createElement("path", {
+      d: "M4 5h7v14H4z"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M13 5h7v14h-7z"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M7 9h1M7 12h1M7 15h1"
+    }));
+    if (name === 'practice') return /*#__PURE__*/React.createElement("svg", {
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: s,
+      strokeWidth: "1.6",
+      strokeLinecap: "round",
+      strokeLinejoin: "round"
+    }, /*#__PURE__*/React.createElement("rect", {
+      x: "3",
+      y: "6",
+      width: "7",
+      height: "12",
+      rx: "1.5"
+    }), /*#__PURE__*/React.createElement("rect", {
+      x: "14",
+      y: "6",
+      width: "7",
+      height: "12",
+      rx: "1.5"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M6.5 9v6M17.5 9v6"
+    }));
+    if (name === 'cheat') return /*#__PURE__*/React.createElement("svg", {
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: s,
+      strokeWidth: "1.6",
+      strokeLinecap: "round",
+      strokeLinejoin: "round"
+    }, /*#__PURE__*/React.createElement("path", {
+      d: "M5 4h11l3 3v13H5z"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M8 9h8M8 12h8M8 15h5"
+    }));
+    if (name === 'home') return /*#__PURE__*/React.createElement("svg", {
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: s,
+      strokeWidth: "1.6",
+      strokeLinecap: "round",
+      strokeLinejoin: "round"
+    }, /*#__PURE__*/React.createElement("path", {
+      d: "M3 11l9-7 9 7"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M5 10v10h14V10"
+    }), /*#__PURE__*/React.createElement("path", {
+      d: "M10 20v-5h4v5"
+    }));
+    return null;
+  }
+  
+  // ─── SCREENS ─────────────────────────────────────────────────────────────────
+  
+  function Overview({
+    goLearn,
+    goPractice
+  }) {
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      className: "hero"
+    }, /*#__PURE__*/React.createElement(Eyebrow, null, "National Mah Jongg League \xB7 Est. 1937"), /*#__PURE__*/React.createElement("h1", {
+      className: "title"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "hand"
+    }, "American"), /*#__PURE__*/React.createElement("br", null), "Mah Jongg."), /*#__PURE__*/React.createElement("p", {
+      className: "lede"
+    }, "A complete, plain-English guide to the tiles, the Charleston, the card, and the loop of a turn \u2014 so you can sit down on Monday and play."), /*#__PURE__*/React.createElement("div", {
+      className: "hero-tiles"
+    }, /*#__PURE__*/React.createElement(Tile, {
+      tile: TILES.bams[2]
+    }), /*#__PURE__*/React.createElement(Tile, {
+      tile: TILES.dots[4]
+    }), /*#__PURE__*/React.createElement(Tile, {
+      tile: TILES.craks[6]
+    }), /*#__PURE__*/React.createElement(Tile, {
+      tile: TILES.dragons[0]
+    }), /*#__PURE__*/React.createElement(Tile, {
+      tile: TILES.jokers[0]
+    }))), /*#__PURE__*/React.createElement(Divider, {
+      deco: true
+    }, "\u2726"), /*#__PURE__*/React.createElement(Eyebrow, null, "01 \u2014 The Game in 30 Seconds"), /*#__PURE__*/React.createElement("h2", {
+      className: "section-title"
+    }, "What you're trying to do."), /*#__PURE__*/React.createElement("p", null, "Four players take turns drawing a tile and discarding a tile. You're racing to be the first to collect a hand that matches one of the recipes on this year's ", /*#__PURE__*/React.createElement("strong", null, "NMJL card"), ". When your tiles match a card line exactly, you say ", /*#__PURE__*/React.createElement("em", null, "\"Mah Jongg!\""), " and you win the round."), /*#__PURE__*/React.createElement("ul", {
+      className: "clean"
+    }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "01"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "You have 13 tiles."), /*#__PURE__*/React.createElement("p", null, "Held behind a rack so only you can see them. On your turn you'll briefly hold 14, then discard one."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "02"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "The card tells you what to build."), /*#__PURE__*/React.createElement("p", null, "Every year the National Mah Jongg League prints a new card. Each line is one possible winning hand."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "03"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Draw, decide, discard."), /*#__PURE__*/React.createElement("p", null, "That's the whole loop. Calling another player's discard speeds it up."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "04"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "First to match a card line wins."), /*#__PURE__*/React.createElement("p", null, "Declare \"Mah Jongg,\" reveal your tiles, collect the payout.")))), /*#__PURE__*/React.createElement(Callout, {
+      tag: "One thing to know"
+    }, "American Mah Jongg has its own rules \u2014 jokers, the Charleston, the annual card. If you've played the Chinese, Japanese, or app versions, expect surprises."), /*#__PURE__*/React.createElement(Divider, {
+      deco: true
+    }, "\u2726"), /*#__PURE__*/React.createElement(Eyebrow, null, "Where to next"), /*#__PURE__*/React.createElement("h2", {
+      className: "section-title"
+    }, "Pick a starting point."), /*#__PURE__*/React.createElement("div", {
+      className: "cheat-grid",
+      style: {
+        marginBottom: 16
+      }
+    }, /*#__PURE__*/React.createElement("button", {
+      className: "cheat-card",
+      onClick: () => goLearn('tiles'),
+      style: {
+        textAlign: 'left',
+        cursor: 'pointer',
+        font: 'inherit',
+        color: 'inherit'
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "A"), /*#__PURE__*/React.createElement("h5", null, "Meet the tiles"), /*#__PURE__*/React.createElement("p", null, "Tap any tile to learn what it is and how it's called.")), /*#__PURE__*/React.createElement("button", {
+      className: "cheat-card",
+      onClick: () => goLearn('charleston'),
+      style: {
+        textAlign: 'left',
+        cursor: 'pointer',
+        font: 'inherit',
+        color: 'inherit'
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "B"), /*#__PURE__*/React.createElement("h5", null, "The Charleston"), /*#__PURE__*/React.createElement("p", null, "The opening tile-passing ritual \u2014 animated.")), /*#__PURE__*/React.createElement("button", {
+      className: "cheat-card",
+      onClick: () => goLearn('turn'),
+      style: {
+        textAlign: 'left',
+        cursor: 'pointer',
+        font: 'inherit',
+        color: 'inherit'
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "C"), /*#__PURE__*/React.createElement("h5", null, "Walk a turn"), /*#__PURE__*/React.createElement("p", null, "Click through one full turn, step by step.")), /*#__PURE__*/React.createElement("button", {
+      className: "cheat-card",
+      onClick: () => goPractice(),
+      style: {
+        textAlign: 'left',
+        cursor: 'pointer',
+        font: 'inherit',
+        color: 'inherit'
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "D"), /*#__PURE__*/React.createElement("h5", null, "Practice"), /*#__PURE__*/React.createElement("p", null, "Flashcards and a tile-by-tile hand builder."))));
+  }
+  function TilesScreen() {
+    const [active, setActive] = useState(null);
+    function Block({
+      title,
+      count,
+      kind,
+      tiles
+    }) {
+      return /*#__PURE__*/React.createElement("div", {
+        className: "suit-block"
+      }, /*#__PURE__*/React.createElement("div", {
+        className: "suit-head"
+      }, /*#__PURE__*/React.createElement("h3", null, title), /*#__PURE__*/React.createElement("div", {
+        className: "meta"
+      }, count)), /*#__PURE__*/React.createElement("p", {
+        style: {
+          fontSize: 14,
+          marginTop: -4
+        }
+      }, kind), /*#__PURE__*/React.createElement("div", {
+        className: "tiles-grid"
+      }, tiles.map(t => /*#__PURE__*/React.createElement(Tile, {
+        key: t.id,
+        tile: t,
+        onClick: () => setActive(t)
+      }))));
+    }
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Eyebrow, null, "02 \u2014 The Tiles"), /*#__PURE__*/React.createElement("h2", {
+      className: "section-title"
+    }, "A standard set has 152 tiles."), /*#__PURE__*/React.createElement("p", null, "Three numbered suits, four winds, three dragons, eight flowers, eight jokers. Tap any tile below to hear what it's called and how it's used."), /*#__PURE__*/React.createElement(Callout, {
+      tag: "Try me"
+    }, "Every tile on this page is tappable. Don't memorize \u2014 just poke around."), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement(Block, {
+      title: "Bams",
+      count: "9 faces \xD7 4 = 36",
+      kind: "The bamboo suit. 2\u20139 show stacks of bamboo; the 1 Bam is a bird.",
+      tiles: TILES.bams
+    }), /*#__PURE__*/React.createElement(Block, {
+      title: "Dots",
+      count: "9 faces \xD7 4 = 36",
+      kind: "The circles suit. Round coins, arranged by count.",
+      tiles: TILES.dots
+    }), /*#__PURE__*/React.createElement(Block, {
+      title: "Craks",
+      count: "9 faces \xD7 4 = 36",
+      kind: "The characters suit. A Chinese numeral above the symbol \u4E07.",
+      tiles: TILES.craks
+    }), /*#__PURE__*/React.createElement(Block, {
+      title: "Winds",
+      count: "4 faces \xD7 4 = 16",
+      kind: "N, E, S, W. East is the dealer's seat and starts the game.",
+      tiles: TILES.winds
+    }), /*#__PURE__*/React.createElement(Block, {
+      title: "Dragons",
+      count: "3 \xD7 4 = 12",
+      kind: "Red pairs with Craks, Green pairs with Bams, White ('Soap') pairs with Dots.",
+      tiles: TILES.dragons
+    }), /*#__PURE__*/React.createElement(Block, {
+      title: "Flowers",
+      count: "8 total",
+      kind: "All 8 are interchangeable \u2014 treated as identical. Cannot be substituted by jokers.",
+      tiles: Array.from({
+        length: 8
+      }, (_, i) => ({
+        ...TILES.flowers[0],
+        id: `F${i}`
+      }))
+    }), /*#__PURE__*/React.createElement(Block, {
+      title: "Jokers",
+      count: "8 total",
+      kind: "Wild \u2014 but only for groups of 3 or more. Never for pairs or singles.",
+      tiles: Array.from({
+        length: 8
+      }, (_, i) => ({
+        ...TILES.jokers[0],
+        id: `J${i}`
+      }))
+    }), /*#__PURE__*/React.createElement(Callout, {
+      tag: "Pro tip"
+    }, "Don't worry about memorizing the bamboo/coin artwork. The number and suit label on the tile are what matter."), active ? /*#__PURE__*/React.createElement(TileSheet, {
+      tile: active,
+      onClose: () => setActive(null)
+    }) : null);
+  }
+  function CharlestonScreen() {
+    const [step, setStep] = useState(0);
+    const [animating, setAnimating] = useState(false);
+    const cur = CHARLESTON_STEPS[step];
+    const last = step === CHARLESTON_STEPS.length - 1;
+    function advance() {
+      setAnimating(true);
+      setTimeout(() => {
+        setAnimating(false);
+        setStep(s => (s + 1) % CHARLESTON_STEPS.length);
+      }, 700);
+    }
+    function ArrowSvg({
+      pass
+    }) {
+      if (pass === 'stop') return /*#__PURE__*/React.createElement("div", {
+        className: "step-label"
+      }, "STOP", /*#__PURE__*/React.createElement("span", {
+        className: "meta"
+      }, "Courtesy \u2014 table votes"));
+      const ax = (x1, y1, x2, y2, key) => /*#__PURE__*/React.createElement("line", {
+        key: key,
+        x1: x1,
+        y1: y1,
+        x2: x2,
+        y2: y2,
+        markerEnd: "url(#mh)",
+        style: {
+          stroke: 'var(--cherry)',
+          strokeWidth: 3,
+          strokeLinecap: 'round'
+        }
+      });
+      const arrows = [];
+      if (pass === 'right') {
+        arrows.push(ax(60, 18, 88, 50, 'a1'), ax(88, 60, 60, 88, 'a2'), ax(50, 88, 18, 60, 'a3'), ax(18, 50, 50, 18, 'a4'));
+      } else if (pass === 'left') {
+        arrows.push(ax(50, 18, 18, 50, 'a1'), ax(18, 60, 50, 88, 'a2'), ax(60, 88, 88, 60, 'a3'), ax(88, 50, 60, 18, 'a4'));
+      } else if (pass === 'across') {
+        arrows.push(ax(53, 22, 53, 80, 'a1'), ax(50, 80, 50, 22, 'a2'), ax(22, 47, 80, 47, 'a3'), ax(80, 50, 22, 50, 'a4'));
+      }
+      return /*#__PURE__*/React.createElement("svg", {
+        viewBox: "0 0 100 100",
+        style: {
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%'
+        }
+      }, /*#__PURE__*/React.createElement("defs", null, /*#__PURE__*/React.createElement("marker", {
+        id: "mh",
+        markerWidth: "6",
+        markerHeight: "6",
+        refX: "3",
+        refY: "3",
+        orient: "auto"
+      }, /*#__PURE__*/React.createElement("path", {
+        d: "M0 0 L6 3 L0 6 z",
+        fill: "var(--cherry)"
+      }))), arrows);
+    }
+    const passingTiles = [TILES.bams[0], TILES.dots[7], TILES.craks[3]];
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Eyebrow, null, "03 \u2014 Setup & The Charleston"), /*#__PURE__*/React.createElement("h2", {
+      className: "section-title"
+    }, "The opening pass."), /*#__PURE__*/React.createElement("p", null, "Before the first turn, players trade tiles in a strict three-round ritual called the ", /*#__PURE__*/React.createElement("strong", null, "Charleston"), ". It's how you turn a random starting hand into something you can actually build with."), /*#__PURE__*/React.createElement("h3", {
+      className: "sub-title"
+    }, "Before the Charleston"), /*#__PURE__*/React.createElement("ul", {
+      className: "clean"
+    }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "a"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Build the wall."), /*#__PURE__*/React.createElement("p", null, "Each player makes a row of 19 tiles, 2 deep, in front of their rack. The four rows together are \"the wall.\""))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "b"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Roll and deal."), /*#__PURE__*/React.createElement("p", null, "East rolls dice to determine where to break the wall. Players take 13 tiles each (East takes 14)."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "c"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Look at your card."), /*#__PURE__*/React.createElement("p", null, "Pick a target line \u2014 or two \u2014 that looks compatible with what you were dealt.")))), /*#__PURE__*/React.createElement(Divider, {
+      deco: true
+    }, "\u2726"), /*#__PURE__*/React.createElement("h3", {
+      className: "sub-title"
+    }, "The three-step pass"), /*#__PURE__*/React.createElement("p", null, "Tap ", /*#__PURE__*/React.createElement("strong", null, "Next pass"), " to walk through the Charleston. Everyone passes ", /*#__PURE__*/React.createElement("strong", null, "at the same time"), ", three tiles at a time, then picks up the three coming the other way."), /*#__PURE__*/React.createElement("div", {
+      className: "cville"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "felt"
+    }), /*#__PURE__*/React.createElement("div", {
+      className: "seat n"
+    }, "North", /*#__PURE__*/React.createElement("span", {
+      className: "you"
+    }, "Sandy \u2192")), /*#__PURE__*/React.createElement("div", {
+      className: "seat e"
+    }, "East", /*#__PURE__*/React.createElement("span", {
+      className: "you"
+    }, "Deb")), /*#__PURE__*/React.createElement("div", {
+      className: "seat s"
+    }, "South", /*#__PURE__*/React.createElement("span", {
+      className: "you"
+    }, "You")), /*#__PURE__*/React.createElement("div", {
+      className: "seat w"
+    }, "West", /*#__PURE__*/React.createElement("span", {
+      className: "you"
+    }, "Jen")), /*#__PURE__*/React.createElement(ArrowSvg, {
+      pass: cur.pass
+    }), animating && cur.pass !== 'stop' ? /*#__PURE__*/React.createElement("div", {
+      style: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%,-50%)',
+        display: 'flex',
+        gap: 2,
+        zIndex: 2
+      }
+    }, passingTiles.map((t, i) => /*#__PURE__*/React.createElement(Tile, {
+      key: i,
+      tile: t,
+      size: "xs"
+    }))) : null), /*#__PURE__*/React.createElement("div", {
+      className: "step-dots"
+    }, CHARLESTON_STEPS.map((s, i) => /*#__PURE__*/React.createElement("button", {
+      key: i,
+      className: `dot ${i === step ? 'active' : i < step ? 'done' : ''}`,
+      "aria-label": `Step ${i + 1}`,
+      onClick: () => setStep(i)
+    }))), /*#__PURE__*/React.createElement("div", {
+      className: "sim-step",
+      style: {
+        marginBottom: 10
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, String(step + 1).padStart(2, '0')), /*#__PURE__*/React.createElement("h5", null, cur.required ? 'Required' : 'Optional', " \xB7 Pass ", cur.name), /*#__PURE__*/React.createElement("p", null, cur.caption)), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 8
+      }
+    }, /*#__PURE__*/React.createElement("button", {
+      className: "btn ghost",
+      onClick: () => setStep(0),
+      disabled: step === 0
+    }, "Reset"), /*#__PURE__*/React.createElement("button", {
+      className: "btn primary",
+      onClick: advance,
+      style: {
+        flex: 1
+      }
+    }, last ? 'Done — back to start' : 'Next pass →')), /*#__PURE__*/React.createElement(Divider, {
+      deco: true
+    }, "\u2726"), /*#__PURE__*/React.createElement(Callout, {
+      tag: "Heads up"
+    }, "Jokers cannot be passed in the Charleston. Also: you can pass tiles you just received, but never tiles you received from the same player on the immediately preceding pass."), /*#__PURE__*/React.createElement("h3", {
+      className: "sub-title"
+    }, "What to pass"), /*#__PURE__*/React.createElement("p", null, "Pass tiles you don't want \u2014 usually singletons in suits you've decided not to pursue, or extras that don't fit your target line."), /*#__PURE__*/React.createElement("div", {
+      className: "do-dont"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "col do"
+    }, /*#__PURE__*/React.createElement("h5", null, "Do pass"), /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", null, "Singletons in suits you're abandoning"), /*#__PURE__*/React.createElement("li", null, "Numbers far from your card line"), /*#__PURE__*/React.createElement("li", null, "Winds you don't need"), /*#__PURE__*/React.createElement("li", null, "Duplicates above what your hand requires"))), /*#__PURE__*/React.createElement("div", {
+      className: "col dont"
+    }, /*#__PURE__*/React.createElement("h5", null, "Don't pass"), /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", null, "Flowers (you almost always want them)"), /*#__PURE__*/React.createElement("li", null, "Jokers (you can't \u2014 rules!)"), /*#__PURE__*/React.createElement("li", null, "Pairs you might extend to pungs"), /*#__PURE__*/React.createElement("li", null, "Tiles in the middle of useful runs")))));
+  }
+  function TurnScreen() {
+    const [step, setStep] = useState(0);
+    const [hand] = useState([TILES.bams[1], TILES.bams[1], TILES.bams[4], TILES.dots[2], TILES.dots[4], TILES.dots[7], TILES.craks[0], TILES.craks[5], TILES.craks[8], TILES.dragons[0], TILES.dragons[0], TILES.flowers[0], TILES.flowers[0]]);
+    const [drewTile, setDrewTile] = useState(null);
+    const [discards, setDiscards] = useState([]);
+    const cur = TURN_STEPS[step];
+    function next() {
+      const nxt = step + 1;
+      if (nxt >= TURN_STEPS.length) {
+        setStep(0);
+        setDrewTile(null);
+        setDiscards([]);
+        return;
+      }
+      const ns = TURN_STEPS[nxt];
+      if (ns.action === 'draw') setDrewTile(TILES.craks[6]);
+      if (ns.action === 'discard' && nxt > 1) {
+        setDiscards(d => [...d, ns.tile]);
+        setDrewTile(null);
+      }
+      setStep(nxt);
+    }
+    function reset() {
+      setStep(0);
+      setDrewTile(null);
+      setDiscards([]);
+    }
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Eyebrow, null, "04 \u2014 A Turn, Step by Step"), /*#__PURE__*/React.createElement("h2", {
+      className: "section-title"
+    }, "The loop you'll repeat all night."), /*#__PURE__*/React.createElement("p", null, "Every turn is the same five-beat rhythm: a tile is discarded \u2192 you decide whether to call it \u2192 you draw \u2192 you decide \u2192 you discard. Walk through one below."), /*#__PURE__*/React.createElement("div", {
+      className: "sim-table"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "sim-rack-label"
+    }, "South \xB7 Your rack"), /*#__PURE__*/React.createElement("div", {
+      className: "sim-rack"
+    }, hand.map((t, i) => /*#__PURE__*/React.createElement(Tile, {
+      key: i,
+      tile: t,
+      size: "xs"
+    })), drewTile ? /*#__PURE__*/React.createElement("div", {
+      style: {
+        marginLeft: 6,
+        borderLeft: '1px dashed rgba(251,243,226,0.3)',
+        paddingLeft: 6
+      }
+    }, /*#__PURE__*/React.createElement(Tile, {
+      tile: drewTile,
+      size: "xs"
+    })) : null), /*#__PURE__*/React.createElement("div", {
+      className: "sim-center"
+    }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      className: "label"
+    }, "Discards"), /*#__PURE__*/React.createElement("div", {
+      className: "discard-pile"
+    }, discards.length === 0 ? /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontFamily: 'var(--mono)',
+        fontSize: 10,
+        opacity: 0.7,
+        letterSpacing: '0.14em',
+        color: 'var(--cream-deep)'
+      }
+    }, "(empty)") : discards.map((t, i) => /*#__PURE__*/React.createElement(Tile, {
+      key: i,
+      tile: t,
+      size: "xs"
+    })))), /*#__PURE__*/React.createElement("div", {
+      style: {
+        textAlign: 'right'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "label"
+    }, "Wall"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 2
+      }
+    }, /*#__PURE__*/React.createElement(Tile, {
+      faceDown: true,
+      size: "xs"
+    }), /*#__PURE__*/React.createElement(Tile, {
+      faceDown: true,
+      size: "xs"
+    }), /*#__PURE__*/React.createElement(Tile, {
+      faceDown: true,
+      size: "xs"
+    })))), /*#__PURE__*/React.createElement("div", {
+      className: "sim-rack-label"
+    }, "North \xB7 Sandy"), /*#__PURE__*/React.createElement("div", {
+      className: "sim-rack"
+    }, [...Array(13)].map((_, i) => /*#__PURE__*/React.createElement(Tile, {
+      key: i,
+      faceDown: true,
+      size: "xs"
+    })))), /*#__PURE__*/React.createElement("div", {
+      className: "step-dots"
+    }, TURN_STEPS.map((_, i) => /*#__PURE__*/React.createElement("button", {
+      key: i,
+      className: `dot ${i === step ? 'active' : i < step ? 'done' : ''}`,
+      "aria-label": `Step ${i + 1}`,
+      onClick: () => {
+        reset();
+        for (let k = 0; k <= i; k++) {
+          const ns = TURN_STEPS[k];
+          if (ns.action === 'draw') setDrewTile(TILES.craks[6]);
+          if (ns.action === 'discard' && k > 1) {
+            setDiscards(d => [...d, ns.tile]);
+            setDrewTile(null);
           }
         }
-      };
-      window.addEventListener('scroll', handleScroll, {
-        passive: true
+        setStep(i);
+      }
+    }))), /*#__PURE__*/React.createElement("div", {
+      className: "sim-step"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, String(step + 1).padStart(2, '0')), /*#__PURE__*/React.createElement("h5", null, cur.title), /*#__PURE__*/React.createElement("p", null, cur.body)), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 8,
+        marginBottom: 16
+      }
+    }, /*#__PURE__*/React.createElement("button", {
+      className: "btn ghost",
+      onClick: reset,
+      disabled: step === 0
+    }, "Reset"), /*#__PURE__*/React.createElement("button", {
+      className: "btn primary",
+      onClick: next,
+      style: {
+        flex: 1
+      }
+    }, step === TURN_STEPS.length - 1 ? 'Start over' : 'Next step →')), /*#__PURE__*/React.createElement(Divider, {
+      deco: true
+    }, "\u2726"), /*#__PURE__*/React.createElement("h3", {
+      className: "sub-title"
+    }, "Calling a discard"), /*#__PURE__*/React.createElement("p", null, "You may \"call\" a discard if it would complete a group you can show face-up on your rack. Calling is a shortcut \u2014 but it forces you to ", /*#__PURE__*/React.createElement("strong", null, "expose"), " those tiles."), /*#__PURE__*/React.createElement(Callout, {
+      tag: "Watch out"
+    }, "Once you call and expose, you're committed: you can't quietly switch to a different hand later if the discards run dry."), /*#__PURE__*/React.createElement("h3", {
+      className: "sub-title"
+    }, "The end of a turn"), /*#__PURE__*/React.createElement("p", null, "Your turn ends the moment you discard. You should have 13 tiles. Play moves to the player on your left (counter-clockwise). The dealer (East) starts the very first turn."));
+  }
+  function CardScreen() {
+    const [active, setActive] = useState(null);
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Eyebrow, null, "05 \u2014 The Card"), /*#__PURE__*/React.createElement("h2", {
+      className: "section-title"
+    }, "Reading the NMJL card."), /*#__PURE__*/React.createElement("p", null, "Every year the National Mah Jongg League prints a small foldout card listing every valid winning hand for that year. It looks like a wall of symbols at first. Here's how to read one line."), /*#__PURE__*/React.createElement("h3", {
+      className: "sub-title"
+    }, "How a line is written"), /*#__PURE__*/React.createElement("ul", {
+      className: "clean"
+    }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "\u2460"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Groups, left to right."), /*#__PURE__*/React.createElement("p", null, "Each block of repeating digits/letters is one group: pair (2), pung (3), kong (4), quint (5)."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "\u2461"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Color = suit."), /*#__PURE__*/React.createElement("p", null, "Numbers are printed in 3 colors \u2014 Bam / Dot / Crak. Same color = same suit. Different colors = different suits required."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "\u2462"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Letters are special tiles."), /*#__PURE__*/React.createElement("p", null, "F = Flower \xB7 D = Dragon \xB7 N E S W = Winds. They keep their own coding."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "\u2463"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "The payout is on the right."), /*#__PURE__*/React.createElement("p", null, "Two prices: one for hands made ", /*#__PURE__*/React.createElement("em", null, "concealed"), " (no calls) and one for hands with ", /*#__PURE__*/React.createElement("em", null, "exposed"), " groups.")))), /*#__PURE__*/React.createElement(Divider, {
+      deco: true
+    }, "\u2726"), /*#__PURE__*/React.createElement("h3", {
+      className: "sub-title"
+    }, "Tap a group to decode it"), /*#__PURE__*/React.createElement("div", {
+      className: "cardline"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "head"
+    }, /*#__PURE__*/React.createElement("span", null, CARD_LINE.category), /*#__PURE__*/React.createElement("span", null, CARD_LINE.number)), /*#__PURE__*/React.createElement("div", {
+      className: "hand-line"
+    }, CARD_LINE.groups.map((g, i) => /*#__PURE__*/React.createElement("span", {
+      key: i,
+      className: `group ${active === i ? 'active' : ''}`,
+      onClick: () => setActive(active === i ? null : i)
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "glyph",
+      "data-color": g.color
+    }, g.label)))), /*#__PURE__*/React.createElement("div", {
+      className: "cardline-help"
+    }, active === null ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+      className: "h"
+    }, "Tap any group above"), /*#__PURE__*/React.createElement("div", null, "Each colored block is one group of tiles. Tap to see what tiles it stands for.")) : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+      className: "h"
+    }, CARD_LINE.groups[active].type.toUpperCase(), " \xB7 ", CARD_LINE.groups[active].label), /*#__PURE__*/React.createElement("div", null, CARD_LINE.groups[active].explain))), /*#__PURE__*/React.createElement("div", {
+      className: "footer"
+    }, /*#__PURE__*/React.createElement("span", null, "Exposed ", CARD_LINE.exposed), /*#__PURE__*/React.createElement("span", {
+      className: "pay"
+    }, "Concealed ", CARD_LINE.concealed))), /*#__PURE__*/React.createElement("h3", {
+      className: "sub-title"
+    }, "The actual tiles"), /*#__PURE__*/React.createElement("p", null, "Here's the hand from the line above, in real tiles."), /*#__PURE__*/React.createElement("div", {
+      style: {
+        background: 'var(--cream-card)',
+        border: '1px solid var(--line)',
+        borderRadius: 4,
+        padding: 14,
+        marginBottom: 16
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 4,
+        flexWrap: 'wrap',
+        alignItems: 'center'
+      }
+    }, [0, 1, 2, 3].map(i => /*#__PURE__*/React.createElement(Tile, {
+      key: `f${i}`,
+      tile: TILES.flowers[0],
+      size: "sm"
+    })), /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 6
+      }
+    }), [0, 1, 2].map(i => /*#__PURE__*/React.createElement(Tile, {
+      key: `b${i}`,
+      tile: TILES.bams[1],
+      size: "sm"
+    })), /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 6
+      }
+    }), [0, 1, 2].map(i => /*#__PURE__*/React.createElement(Tile, {
+      key: `d${i}`,
+      tile: TILES.dots[1],
+      size: "sm"
+    })), /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 6
+      }
+    }), [0, 1, 2, 3].map(i => /*#__PURE__*/React.createElement(Tile, {
+      key: `c${i}`,
+      tile: TILES.craks[1],
+      size: "sm"
+    }))), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginTop: 10,
+        fontFamily: 'var(--mono)',
+        fontSize: 10,
+        letterSpacing: '0.14em',
+        textTransform: 'uppercase',
+        color: 'var(--ink-mute)'
+      }
+    }, /*#__PURE__*/React.createElement("span", null, "FFFF"), /*#__PURE__*/React.createElement("span", null, "2B 2B 2B"), /*#__PURE__*/React.createElement("span", null, "2D 2D 2D"), /*#__PURE__*/React.createElement("span", null, "2C 2C 2C 2C"))), /*#__PURE__*/React.createElement(Callout, {
+      tag: "The gotcha"
+    }, CARD_LINE.notes), /*#__PURE__*/React.createElement("h3", {
+      className: "sub-title"
+    }, "Card sections you'll see"), /*#__PURE__*/React.createElement("ul", {
+      className: "clean"
+    }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "\xB7"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Like Numbers"), /*#__PURE__*/React.createElement("p", null, "Every group uses the same number."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "\xB7"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "2025 / current-year"), /*#__PURE__*/React.createElement("p", null, "Hands themed around the year's digits."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "\xB7"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Addition Hands"), /*#__PURE__*/React.createElement("p", null, "The numbers in the groups literally add up \u2014 e.g. 1 + 2 = 3."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "\xB7"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Consecutive Runs"), /*#__PURE__*/React.createElement("p", null, "Numbers go in order \u2014 e.g. 4, 5, 6."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "\xB7"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Singles & Pairs"), /*#__PURE__*/React.createElement("p", null, "No pungs or kongs allowed. Jokers forbidden. Higher payouts."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "\xB7"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Winds & Dragons, 369, Quints"), /*#__PURE__*/React.createElement("p", null, "Themed sections \u2014 colorful and constrained.")))), /*#__PURE__*/React.createElement(Callout, {
+      tag: "Get the real card"
+    }, "Visit the National Mah Jongg League site to order this year's card ($14 standard / $15 large print). It's reissued every April."));
+  }
+  function StrategyScreen() {
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Eyebrow, null, "06 \u2014 Strategy"), /*#__PURE__*/React.createElement("h2", {
+      className: "section-title"
+    }, "Beginner moves that win."), /*#__PURE__*/React.createElement("p", null, "You don't need to play like a shark \u2014 just stop making the rookie mistakes. Six habits that put you above table average:"), /*#__PURE__*/React.createElement("ul", {
+      className: "clean"
+    }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "01"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Pick two target lines, not one."), /*#__PURE__*/React.createElement("p", null, "Pick a primary and a backup that share tiles. Lock in only when the Charleston ends."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "02"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Count your jokers."), /*#__PURE__*/React.createElement("p", null, "Eight in the set. Track how many have been used. The more in play, the more aggressive everyone gets."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "03"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Watch what's discarded."), /*#__PURE__*/React.createElement("p", null, "If 8 Dots have hit the table three times, no one's collecting them. Don't pursue a hand that needs them."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "04"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Don't expose unless you have to."), /*#__PURE__*/React.createElement("p", null, "Calling discards is fast but tells the table what you're collecting. Concealed hands pay double."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "05"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Defense matters late."), /*#__PURE__*/React.createElement("p", null, "If someone has exposed groups suggesting they're one tile away, don't discard tiles they might need."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "06"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "If your hand is dead, switch hard."), /*#__PURE__*/React.createElement("p", null, "If the card line you're chasing is now impossible, don't sink with it. Find a new line \u2014 even a worse-paying one.")))), /*#__PURE__*/React.createElement(Divider, {
+      deco: true
+    }, "\u2726"), /*#__PURE__*/React.createElement("h3", {
+      className: "sub-title"
+    }, "Joker rules at a glance"), /*#__PURE__*/React.createElement("div", {
+      className: "do-dont"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "col do"
+    }, /*#__PURE__*/React.createElement("h5", null, "Jokers can"), /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", null, "Stand in for any tile in a pung, kong, or quint"), /*#__PURE__*/React.createElement("li", null, "Be swapped for the real tile they represent (any player, any turn)"), /*#__PURE__*/React.createElement("li", null, "Count toward winning a hand"))), /*#__PURE__*/React.createElement("div", {
+      className: "col dont"
+    }, /*#__PURE__*/React.createElement("h5", null, "Jokers can't"), /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", null, "Be used in a pair or for a single tile"), /*#__PURE__*/React.createElement("li", null, "Be discarded except by accident (penalty)"), /*#__PURE__*/React.createElement("li", null, "Be passed in the Charleston"), /*#__PURE__*/React.createElement("li", null, "Be used in \"Singles & Pairs\" hands")))), /*#__PURE__*/React.createElement(Callout, {
+      tag: "Memorize this one"
+    }, "A joker IS the tile it stands for. If someone redeems it, you replace it with the matching real tile and put the joker on your rack."), /*#__PURE__*/React.createElement("h3", {
+      className: "sub-title"
+    }, "Mental checklist before discarding"), /*#__PURE__*/React.createElement("ul", {
+      className: "clean"
+    }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "a"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Did I draw what I needed?"), /*#__PURE__*/React.createElement("p", null, "If yes, keep it and discard a useless tile from your hand instead."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "b"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Is anyone exposed?"), /*#__PURE__*/React.createElement("p", null, "Look at their face-up groups. Avoid discarding what they might call."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "c"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Am I still on target?"), /*#__PURE__*/React.createElement("p", null, "Glance at your card line. Are you closer than last turn?")))));
+  }
+  function EtiquetteScreen() {
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Eyebrow, null, "07 \u2014 Etiquette"), /*#__PURE__*/React.createElement("h2", {
+      className: "section-title"
+    }, "Table manners."), /*#__PURE__*/React.createElement("p", null, "Mah Jongg is fast and very social. These conventions are universal \u2014 knowing them prevents 90% of beginner friction."), /*#__PURE__*/React.createElement("h3", {
+      className: "sub-title"
+    }, "At the table"), /*#__PURE__*/React.createElement("div", {
+      className: "do-dont"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "col do"
+    }, /*#__PURE__*/React.createElement("h5", null, "Do"), /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", null, "Say your discard out loud, clearly"), /*#__PURE__*/React.createElement("li", null, "Wait until the discard is fully released before calling"), /*#__PURE__*/React.createElement("li", null, "Keep your tiles behind your rack"), /*#__PURE__*/React.createElement("li", null, "Use the joker swap any time it's your turn"), /*#__PURE__*/React.createElement("li", null, "Compliment a well-built hand"))), /*#__PURE__*/React.createElement("div", {
+      className: "col dont"
+    }, /*#__PURE__*/React.createElement("h5", null, "Don't"), /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", null, "Touch your tiles before the Charleston ends if you can help it"), /*#__PURE__*/React.createElement("li", null, "Comment on other people's exposed tiles mid-hand"), /*#__PURE__*/React.createElement("li", null, "Discard without naming the tile"), /*#__PURE__*/React.createElement("li", null, "Hover-pick over a discard pretending to think"), /*#__PURE__*/React.createElement("li", null, "Reveal your hand if you've made an error")))), /*#__PURE__*/React.createElement(Divider, {
+      deco: true
+    }, "\u2726"), /*#__PURE__*/React.createElement("h3", {
+      className: "sub-title"
+    }, "Calling \u2014 the timing"), /*#__PURE__*/React.createElement("p", null, "If you want to call a discarded tile, you must do so ", /*#__PURE__*/React.createElement("strong", null, "before the next player picks from the wall"), ". After that, the discard is \"dead\" \u2014 gone forever."), /*#__PURE__*/React.createElement(Callout, {
+      tag: "The pause"
+    }, "Most tables observe a polite half-second pause after each discard to give callers time. If you're slow, ask for a moment \u2014 don't grab tiles mid-deal."), /*#__PURE__*/React.createElement("h3", {
+      className: "sub-title"
+    }, "Mistakes happen"), /*#__PURE__*/React.createElement("ul", {
+      className: "clean"
+    }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "a"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Wrong call."), /*#__PURE__*/React.createElement("p", null, "If you call a tile but can't actually use it, expose your hand and you're typically declared \"dead\" for the rest of that hand."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "b"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "13-tile error."), /*#__PURE__*/React.createElement("p", null, "If you discover mid-hand that you have 12 or 14 tiles, you're dead. Keep playing \u2014 just stop discarding aggressively."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "c"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "False Mah Jongg."), /*#__PURE__*/React.createElement("p", null, "If you declare and you're wrong: dead for the rest of the hand, and at most tables you pay each player the value of the hand.")))), /*#__PURE__*/React.createElement("h3", {
+      className: "sub-title"
+    }, "House rules to settle in advance"), /*#__PURE__*/React.createElement("ul", {
+      className: "clean"
+    }, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "\xB7"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Stakes."), /*#__PURE__*/React.createElement("p", null, "Quarters? Dollars? Nothing? Decide before you sit down."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "\xB7"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Courtesy pass."), /*#__PURE__*/React.createElement("p", null, "Skip it, do it once, do it every game?"))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "\xB7"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Blind passes."), /*#__PURE__*/React.createElement("p", null, "Whether you may pass tiles received the previous pass without looking."))), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "\xB7"), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("strong", null, "Wall game."), /*#__PURE__*/React.createElement("p", null, "What happens if the wall runs out before anyone wins. Usually: nobody pays anyone.")))));
+  }
+  function Flashcards() {
+    const [i, setI] = useState(0);
+    const [flipped, setFlipped] = useState(false);
+    const [marked, setMarked] = useState({
+      right: 0,
+      wrong: 0
+    });
+    const card = QUIZ[i];
+    function next(judged) {
+      if (judged) setMarked(m => ({
+        ...m,
+        [judged]: m[judged] + 1
+      }));
+      setFlipped(false);
+      setTimeout(() => setI(j => (j + 1) % QUIZ.length), 220);
+    }
+    function reset() {
+      setI(0);
+      setFlipped(false);
+      setMarked({
+        right: 0,
+        wrong: 0
       });
-      return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
-    const scrollTo = id => {
-      const el = document.getElementById(id);
-      if (el) el.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    };
-    const sections = [{
+    }
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      className: "builder-meta"
+    }, /*#__PURE__*/React.createElement("span", null, "Card ", String(i + 1).padStart(2, '0'), " of ", QUIZ.length), /*#__PURE__*/React.createElement("span", {
+      className: "count"
+    }, /*#__PURE__*/React.createElement("strong", null, marked.right), " / ", marked.right + marked.wrong || 0)), /*#__PURE__*/React.createElement("div", {
+      className: "flash-wrap"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "flashcard",
+      onClick: () => setFlipped(f => !f)
+    }, flipped ? /*#__PURE__*/React.createElement("div", {
+      className: "flash-face back",
+      key: `b-${i}`
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "q-eyebrow"
+    }, "Answer"), /*#__PURE__*/React.createElement("p", {
+      className: "q-answer"
+    }, card.a), /*#__PURE__*/React.createElement("p", {
+      className: "q-detail"
+    }, card.detail), /*#__PURE__*/React.createElement("div", {
+      className: "flip-hint"
+    }, "tap to flip back")) : /*#__PURE__*/React.createElement("div", {
+      className: "flash-face front",
+      key: `f-${i}`
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "q-eyebrow"
+    }, "Question"), /*#__PURE__*/React.createElement("p", {
+      className: "q-prompt"
+    }, card.q), /*#__PURE__*/React.createElement("div", {
+      className: "flip-hint"
+    }, "tap to flip")))), /*#__PURE__*/React.createElement("div", {
+      className: "flash-controls",
+      style: {
+        marginBottom: 10
+      }
+    }, /*#__PURE__*/React.createElement("button", {
+      className: "btn ghost",
+      onClick: () => next('wrong'),
+      disabled: !flipped
+    }, "Got it wrong"), /*#__PURE__*/React.createElement("button", {
+      className: "btn primary",
+      onClick: () => next('right'),
+      disabled: !flipped
+    }, "Got it right")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 8
+      }
+    }, /*#__PURE__*/React.createElement("button", {
+      className: "btn ghost small",
+      style: {
+        flex: 1
+      },
+      onClick: reset
+    }, "Restart"), /*#__PURE__*/React.createElement("button", {
+      className: "btn ghost small",
+      style: {
+        flex: 1
+      },
+      onClick: () => {
+        setFlipped(false);
+        setTimeout(() => setI(j => (j + 1) % QUIZ.length), 200);
+      }
+    }, "Skip")), /*#__PURE__*/React.createElement(Callout, {
+      tag: "Tip"
+    }, "Quiz yourself out loud \u2014 saying the answer is closer to how it'll feel at the table than reading it silently."));
+  }
+  function HandBuilder() {
+    const [tray, setTray] = useState([]);
+    const [filter, setFilter] = useState('all');
+    function add(t) {
+      if (tray.length >= 14) return;
+      setTray(arr => [...arr, {
+        ...t,
+        _k: Math.random()
+      }]);
+    }
+    function remove(k) {
+      setTray(arr => arr.filter(x => x._k !== k));
+    }
+    function clear() {
+      setTray([]);
+    }
+    const filters = [{
+      id: 'all',
+      label: 'All'
+    }, {
+      id: 'bam',
+      label: 'Bams'
+    }, {
+      id: 'dot',
+      label: 'Dots'
+    }, {
+      id: 'crak',
+      label: 'Craks'
+    }, {
+      id: 'honor',
+      label: 'W/D/F/J'
+    }];
+    const visibleTiles = useMemo(() => {
+      if (filter === 'all') return ALL_TILES;
+      if (filter === 'honor') return [...TILES.winds, ...TILES.dragons, ...TILES.flowers, ...TILES.jokers];
+      return ALL_TILES.filter(t => t.suit === filter);
+    }, [filter]);
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+      className: "builder-meta"
+    }, /*#__PURE__*/React.createElement("span", null, "Your hand"), /*#__PURE__*/React.createElement("span", {
+      className: "count"
+    }, /*#__PURE__*/React.createElement("strong", null, tray.length), " / 13 (+1 draw)")), /*#__PURE__*/React.createElement("div", {
+      className: "builder-tray"
+    }, tray.length === 0 ? /*#__PURE__*/React.createElement("div", {
+      className: "empty"
+    }, "Tap tiles below to add them to your hand") : /*#__PURE__*/React.createElement("div", {
+      className: "tile-rack"
+    }, tray.map(t => /*#__PURE__*/React.createElement(Tile, {
+      key: t._k,
+      tile: t,
+      size: "sm",
+      onClick: () => remove(t._k)
+    })))), /*#__PURE__*/React.createElement("div", {
+      className: "builder-palette"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "pal-label"
+    }, "Tile palette"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 6,
+        marginBottom: 10,
+        flexWrap: 'wrap'
+      }
+    }, filters.map(f => /*#__PURE__*/React.createElement("button", {
+      key: f.id,
+      className: `chip ${filter === f.id ? 'active' : ''}`,
+      onClick: () => setFilter(f.id)
+    }, f.label))), /*#__PURE__*/React.createElement("div", {
+      className: "scroll"
+    }, visibleTiles.map(t => /*#__PURE__*/React.createElement(Tile, {
+      key: t.id,
+      tile: t,
+      size: "sm",
+      onClick: () => add(t)
+    })))), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 8,
+        marginBottom: 16
+      }
+    }, /*#__PURE__*/React.createElement("button", {
+      className: "btn ghost",
+      onClick: clear,
+      disabled: !tray.length
+    }, "Clear"), /*#__PURE__*/React.createElement("button", {
+      className: "btn ghost",
+      style: {
+        flex: 1
+      },
+      onClick: () => {
+        const pool = [...ALL_TILES];
+        const out = [];
+        for (let i = 0; i < 13; i++) out.push({
+          ...pool[Math.floor(Math.random() * pool.length)],
+          _k: Math.random()
+        });
+        setTray(out);
+      }
+    }, "Deal me 13 random")), /*#__PURE__*/React.createElement(Callout, {
+      tag: "Try this"
+    }, "Try building a \"Like Numbers\" hand: pick a single number (say, 5) and assemble FFFF + three pungs of 5s in three different suits. That's a real winning shape."));
+  }
+  function PracticeScreen() {
+    const [mode, setMode] = useState('flash');
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Eyebrow, null, "Practice"), /*#__PURE__*/React.createElement("h2", {
+      className: "section-title"
+    }, "Two ways to stay sharp."), /*#__PURE__*/React.createElement("p", null, "A drill for facts, a sandbox for tile-shape. Use both before Monday."), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 8,
+        marginBottom: 20
+      }
+    }, /*#__PURE__*/React.createElement("button", {
+      className: `chip ${mode === 'flash' ? 'active' : ''}`,
+      style: {
+        flex: 1,
+        justifyContent: 'center'
+      },
+      onClick: () => setMode('flash')
+    }, "Flashcards"), /*#__PURE__*/React.createElement("button", {
+      className: `chip ${mode === 'build' ? 'active' : ''}`,
+      style: {
+        flex: 1,
+        justifyContent: 'center'
+      },
+      onClick: () => setMode('build')
+    }, "Hand Builder")), mode === 'flash' ? /*#__PURE__*/React.createElement(Flashcards, null) : /*#__PURE__*/React.createElement(HandBuilder, null));
+  }
+  function CheatSheet() {
+    return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Eyebrow, null, "Cheat Sheet"), /*#__PURE__*/React.createElement("h2", {
+      className: "section-title"
+    }, "Everything, in one screen."), /*#__PURE__*/React.createElement("p", null, "Bookmark this. Open it at the table. The whole game on one screen."), /*#__PURE__*/React.createElement("h3", {
+      className: "sub-title"
+    }, "Groups"), /*#__PURE__*/React.createElement("div", {
+      className: "cheat-grid"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "cheat-card"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "2"), /*#__PURE__*/React.createElement("h5", null, "Pair"), /*#__PURE__*/React.createElement("p", null, "2 identical tiles. ", /*#__PURE__*/React.createElement("strong", null, "No jokers."))), /*#__PURE__*/React.createElement("div", {
+      className: "cheat-card"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "3"), /*#__PURE__*/React.createElement("h5", null, "Pung"), /*#__PURE__*/React.createElement("p", null, "3 identical tiles. Jokers OK.")), /*#__PURE__*/React.createElement("div", {
+      className: "cheat-card"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "4"), /*#__PURE__*/React.createElement("h5", null, "Kong"), /*#__PURE__*/React.createElement("p", null, "4 identical tiles. Jokers OK.")), /*#__PURE__*/React.createElement("div", {
+      className: "cheat-card"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "5"), /*#__PURE__*/React.createElement("h5", null, "Quint"), /*#__PURE__*/React.createElement("p", null, "5 of a kind. Requires jokers."))), /*#__PURE__*/React.createElement(Divider, {
+      deco: true
+    }, "\u2726"), /*#__PURE__*/React.createElement("h3", {
+      className: "sub-title"
+    }, "The set, at a glance"), /*#__PURE__*/React.createElement("div", {
+      className: "cheat-grid"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "cheat-card"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "108"), /*#__PURE__*/React.createElement("h5", null, "Suit tiles"), /*#__PURE__*/React.createElement("p", null, "Bams + Dots + Craks. 36 of each suit (1\u20139, four copies each).")), /*#__PURE__*/React.createElement("div", {
+      className: "cheat-card"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "28"), /*#__PURE__*/React.createElement("h5", null, "Honors"), /*#__PURE__*/React.createElement("p", null, "16 Winds + 12 Dragons.")), /*#__PURE__*/React.createElement("div", {
+      className: "cheat-card"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "8"), /*#__PURE__*/React.createElement("h5", null, "Flowers"), /*#__PURE__*/React.createElement("p", null, "All interchangeable.")), /*#__PURE__*/React.createElement("div", {
+      className: "cheat-card"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "8"), /*#__PURE__*/React.createElement("h5", null, "Jokers"), /*#__PURE__*/React.createElement("p", null, "Wild for groups of 3+ only."))), /*#__PURE__*/React.createElement(Divider, {
+      deco: true
+    }, "\u2726"), /*#__PURE__*/React.createElement("h3", {
+      className: "sub-title"
+    }, "Dragons pair with suits"), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        gap: 10,
+        justifyContent: 'space-around',
+        background: 'var(--cream-card)',
+        border: '1px solid var(--line)',
+        padding: 14,
+        borderRadius: 4,
+        marginBottom: 16,
+        flexWrap: 'wrap'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        textAlign: 'center'
+      }
+    }, /*#__PURE__*/React.createElement(Tile, {
+      tile: TILES.dragons[1],
+      size: "sm"
+    }), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontFamily: 'var(--mono)',
+        fontSize: 9,
+        letterSpacing: '0.12em',
+        textTransform: 'uppercase',
+        marginTop: 6,
+        color: 'var(--ink-mute)'
+      }
+    }, "Green \u2192 Bams")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        textAlign: 'center'
+      }
+    }, /*#__PURE__*/React.createElement(Tile, {
+      tile: TILES.dragons[2],
+      size: "sm"
+    }), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontFamily: 'var(--mono)',
+        fontSize: 9,
+        letterSpacing: '0.12em',
+        textTransform: 'uppercase',
+        marginTop: 6,
+        color: 'var(--ink-mute)'
+      }
+    }, "Soap \u2192 Dots")), /*#__PURE__*/React.createElement("div", {
+      style: {
+        textAlign: 'center'
+      }
+    }, /*#__PURE__*/React.createElement(Tile, {
+      tile: TILES.dragons[0],
+      size: "sm"
+    }), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontFamily: 'var(--mono)',
+        fontSize: 9,
+        letterSpacing: '0.12em',
+        textTransform: 'uppercase',
+        marginTop: 6,
+        color: 'var(--ink-mute)'
+      }
+    }, "Red \u2192 Craks"))), /*#__PURE__*/React.createElement("h3", {
+      className: "sub-title"
+    }, "A turn, in four words"), /*#__PURE__*/React.createElement("div", {
+      className: "cheat-grid"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "cheat-card"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "1"), /*#__PURE__*/React.createElement("h5", null, "Watch"), /*#__PURE__*/React.createElement("p", null, "The discard.")), /*#__PURE__*/React.createElement("div", {
+      className: "cheat-card"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "2"), /*#__PURE__*/React.createElement("h5", null, "Call?"), /*#__PURE__*/React.createElement("p", null, "Or pass.")), /*#__PURE__*/React.createElement("div", {
+      className: "cheat-card"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "3"), /*#__PURE__*/React.createElement("h5", null, "Draw"), /*#__PURE__*/React.createElement("p", null, "From the wall.")), /*#__PURE__*/React.createElement("div", {
+      className: "cheat-card"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, "4"), /*#__PURE__*/React.createElement("h5", null, "Discard"), /*#__PURE__*/React.createElement("p", null, "Name it aloud."))), /*#__PURE__*/React.createElement(Divider, {
+      deco: true
+    }, "\u2726"), /*#__PURE__*/React.createElement("h3", {
+      className: "sub-title"
+    }, "Glossary"), /*#__PURE__*/React.createElement("ul", {
+      className: "clean"
+    }, GLOSSARY.map(g => /*#__PURE__*/React.createElement("li", {
+      key: g.term
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "num",
+      style: {
+        fontFamily: 'var(--display)',
+        fontStyle: 'italic',
+        fontSize: 18,
+        minWidth: 80
+      }
+    }, g.term), /*#__PURE__*/React.createElement("div", {
+      className: "body"
+    }, /*#__PURE__*/React.createElement("p", null, g.def))))), /*#__PURE__*/React.createElement(Callout, {
+      tag: "One last thing"
+    }, "If you're stuck mid-game, ask. The other players want you to play more, not less."));
+  }
+  
+  // ─── APP SHELL ────────────────────────────────────────────────────────────────
+  
+  function App() {
+    const LEARN_SECTIONS = [{
       id: 'overview',
-      label: 'Overview'
+      label: 'Overview',
+      Comp: Overview
     }, {
       id: 'tiles',
-      label: 'Tiles'
+      label: 'Tiles',
+      Comp: TilesScreen
     }, {
-      id: 'setup',
-      label: 'Setup'
+      id: 'charleston',
+      label: 'Charleston',
+      Comp: CharlestonScreen
     }, {
-      id: 'gameplay',
-      label: 'Gameplay'
+      id: 'turn',
+      label: 'A Turn',
+      Comp: TurnScreen
     }, {
       id: 'card',
-      label: 'The Card'
-    }, {
-      id: 'winning',
-      label: 'Winning'
-    }, {
-      id: 'etiquette',
-      label: 'Etiquette'
+      label: 'The Card',
+      Comp: CardScreen
     }, {
       id: 'strategy',
-      label: 'Strategy'
+      label: 'Strategy',
+      Comp: StrategyScreen
+    }, {
+      id: 'etiquette',
+      label: 'Etiquette',
+      Comp: EtiquetteScreen
     }];
-    const Tile = ({
-      children,
-      color = 'ink'
-    }) => {
-      const colors = {
-        ink: 'text-stone-900',
-        red: 'text-red-700',
-        green: 'text-emerald-800',
-        blue: 'text-blue-700'
+    const initial = (() => {
+      const h = (window.location.hash || '').replace('#', '');
+      const [t, sub] = h.split('/');
+      return {
+        tab: ['learn', 'practice', 'cheat'].includes(t) ? t : 'learn',
+        learnSection: LEARN_SECTIONS.find(s => s.id === sub)?.id || 'overview'
       };
-      return /*#__PURE__*/React.createElement("div", {
-        className: `w-9 h-12 bg-amber-50 rounded border-2 border-amber-200/70 flex items-center justify-center text-xl shadow-md ${colors[color]} select-none`
-      }, children);
-    };
-    const HeroTile = ({
-      top,
-      bottom,
-      color = 'ink'
-    }) => {
-      const colors = {
-        ink: 'text-stone-800',
-        red: 'text-red-700',
-        green: 'text-emerald-700',
-        blue: 'text-blue-700'
-      };
-      return /*#__PURE__*/React.createElement("div", {
-        className: `w-9 h-12 bg-amber-50 rounded border-2 border-amber-200 flex flex-col items-center justify-center shadow-md select-none ${colors[color]}`
-      }, /*#__PURE__*/React.createElement("span", {
-        className: "font-serif text-base font-semibold leading-none"
-      }, top), bottom && /*#__PURE__*/React.createElement("span", {
-        className: "font-mono text-[7px] leading-none mt-1 opacity-40 tracking-tight"
-      }, bottom));
-    };
-    const SectionTag = ({
-      children
-    }) => /*#__PURE__*/React.createElement("div", {
-      className: "font-mono text-[10px] tracking-[0.25em] uppercase text-amber-500 mb-3"
-    }, children);
-    const Callout = ({
-      title,
-      children,
-      variant = 'gold'
-    }) => {
-      const styles = variant === 'warning' ? 'bg-orange-900/20 border-orange-600' : 'bg-amber-700/10 border-amber-500';
-      const titleColor = variant === 'warning' ? 'text-orange-400' : 'text-amber-500';
-      const icon = variant === 'warning' ? '⚠' : '✦';
-      return /*#__PURE__*/React.createElement("div", {
-        className: `${styles} border-l-[3px] rounded-r-md p-4 my-5`
-      }, /*#__PURE__*/React.createElement("div", {
-        className: `font-mono text-[10px] tracking-[0.2em] uppercase ${titleColor} mb-2 flex items-center gap-1.5`
-      }, /*#__PURE__*/React.createElement("span", null, icon), /*#__PURE__*/React.createElement("span", null, title)), /*#__PURE__*/React.createElement("p", {
-        className: "text-[15px] leading-relaxed text-stone-200/80 m-0"
-      }, children));
-    };
-    const InfoCard = ({
-      title,
-      items
-    }) => /*#__PURE__*/React.createElement("div", {
-      className: "bg-white/[0.04] border border-white/10 rounded-lg p-4"
-    }, /*#__PURE__*/React.createElement("h4", {
-      className: "font-serif text-[13px] font-semibold text-amber-300 uppercase tracking-wider mb-3"
-    }, title), /*#__PURE__*/React.createElement("ul", {
-      className: "space-y-1.5"
-    }, items.map((item, i) => /*#__PURE__*/React.createElement("li", {
-      key: i,
-      className: "text-sm text-stone-200/70 leading-snug border-b border-white/5 last:border-0 pb-1.5 last:pb-0"
-    }, /*#__PURE__*/React.createElement("span", {
-      className: "text-amber-500 mr-1.5"
-    }, "\xB7"), item))));
-    const Step = ({
-      num,
-      title,
-      children
-    }) => /*#__PURE__*/React.createElement("li", {
-      className: "flex gap-3.5 mb-5"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "flex-shrink-0 w-8 h-8 rounded-full border-2 border-amber-500 flex items-center justify-center font-mono text-xs text-amber-500 bg-amber-700/10 mt-0.5"
-    }, num), /*#__PURE__*/React.createElement("div", {
-      className: "flex-1 min-w-0"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "font-serif text-[15px] font-semibold text-stone-100 mb-1"
-    }, title), /*#__PURE__*/React.createElement("p", {
-      className: "text-[15px] text-stone-200/75 leading-relaxed m-0"
-    }, children)));
-    const HandCard = ({
-      name,
-      value,
-      desc
-    }) => /*#__PURE__*/React.createElement("div", {
-      className: "bg-white/[0.03] border border-white/10 rounded-lg p-4"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "flex justify-between items-baseline gap-2 mb-1.5 flex-wrap"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "font-serif text-[15px] font-semibold text-amber-300"
-    }, name), /*#__PURE__*/React.createElement("div", {
-      className: "font-mono text-[11px] tracking-wider text-amber-500 whitespace-nowrap"
-    }, value)), /*#__PURE__*/React.createElement("p", {
-      className: "text-[14px] text-stone-200/65 leading-relaxed m-0"
-    }, desc));
-    const SectionHeader = ({
-      tag,
-      title
-    }) => /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(SectionTag, null, tag), /*#__PURE__*/React.createElement("h2", {
-      className: "font-serif text-2xl md:text-3xl font-semibold text-stone-100 mb-5 leading-tight tracking-wide"
-    }, title));
-    const SubHead = ({
-      children
-    }) => /*#__PURE__*/React.createElement("h3", {
-      className: "font-serif text-base md:text-lg text-amber-300 mt-7 mb-3 tracking-wide"
-    }, children);
-    const P = ({
-      children
-    }) => /*#__PURE__*/React.createElement("p", {
-      className: "text-[16px] md:text-[17px] text-stone-200/80 leading-[1.75] mb-4"
-    }, children);
+    })();
+    const [tab, setTab] = useState(initial.tab);
+    const [learnSection, setLearnSection] = useState(initial.learnSection);
+    const mainRef = useRef(null);
+    useEffect(() => {
+      const h = tab === 'learn' ? `#learn/${learnSection}` : `#${tab}`;
+      window.history.replaceState(null, '', h);
+    }, [tab, learnSection]);
+    function switchTab(t) {
+      setTab(t);
+      if (mainRef.current) mainRef.current.scrollTop = 0;
+      window.scrollTo({
+        top: 0,
+        behavior: 'instant'
+      });
+    }
+    function jumpToLearn(section) {
+      setTab('learn');
+      setLearnSection(section);
+      setTimeout(() => window.scrollTo({
+        top: 0,
+        behavior: 'instant'
+      }), 0);
+    }
+    const ActiveLearn = LEARN_SECTIONS.find(s => s.id === learnSection);
     return /*#__PURE__*/React.createElement("div", {
-      className: "min-h-screen text-stone-100",
-      style: {
-        backgroundColor: '#1b4332',
-        backgroundImage: 'radial-gradient(ellipse at 20% 10%, rgba(201,168,76,0.08) 0%, transparent 50%), radial-gradient(ellipse at 80% 90%, rgba(201,168,76,0.06) 0%, transparent 50%)'
-      }
+      className: "app"
+    }, /*#__PURE__*/React.createElement("header", {
+      className: "app-header"
     }, /*#__PURE__*/React.createElement("div", {
-      className: "fixed top-0 left-0 h-1 z-50 transition-all duration-100",
-      style: {
-        width: `${progress}%`,
-        background: 'linear-gradient(90deg, #40916c, #c9a84c)'
-      }
-    }), /*#__PURE__*/React.createElement("div", {
-      className: "relative text-center px-5 pt-12 pb-9 border-b border-amber-700/20 overflow-hidden"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "absolute inset-0 pointer-events-none",
-      style: {
-        background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.12) 0%, transparent 70%)'
-      }
-    }), /*#__PURE__*/React.createElement("div", {
-      className: "relative"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "font-mono text-[10px] tracking-[0.25em] uppercase text-amber-500 mb-4"
-    }, "National Mah Jongg League \xB7 Est. 1937"), /*#__PURE__*/React.createElement("h1", {
-      className: "font-serif font-semibold leading-[1.05] mb-3.5 tracking-wide",
-      style: {
-        fontSize: 'clamp(34px, 9vw, 72px)'
-      }
-    }, "American", /*#__PURE__*/React.createElement("span", {
-      className: "block text-amber-500"
-    }, "Mah Jongg")), /*#__PURE__*/React.createElement("p", {
-      className: "italic text-stone-200/60 max-w-md mx-auto mb-8 px-2",
-      style: {
-        fontSize: 'clamp(15px, 4vw, 19px)'
-      }
-    }, "The complete guide to tiles, hands, strategy, and the art of the game"), /*#__PURE__*/React.createElement("div", {
-      className: "flex justify-center gap-1.5 flex-wrap px-2"
-    }, /*#__PURE__*/React.createElement(HeroTile, {
-      top: "3",
-      bottom: "BAM",
-      color: "green"
-    }), /*#__PURE__*/React.createElement(HeroTile, {
-      top: "5",
-      bottom: "DOT",
-      color: "blue"
-    }), /*#__PURE__*/React.createElement(HeroTile, {
-      top: "7",
-      bottom: "CRAK"
-    }), /*#__PURE__*/React.createElement(HeroTile, {
-      top: "E",
-      bottom: "WIND"
-    }), /*#__PURE__*/React.createElement(HeroTile, {
-      top: "R",
-      bottom: "DRAG",
-      color: "red"
-    }), /*#__PURE__*/React.createElement(HeroTile, {
-      top: "G",
-      bottom: "DRAG",
-      color: "green"
-    }), /*#__PURE__*/React.createElement(HeroTile, {
-      top: "\u2605",
-      bottom: "JKR",
-      color: "green"
-    })))), /*#__PURE__*/React.createElement("nav", {
-      className: "sticky top-0 z-40 bg-black/30 backdrop-blur border-b border-amber-700/15 px-4 py-3 overflow-x-auto whitespace-nowrap",
-      style: {
-        WebkitOverflowScrolling: 'touch'
-      }
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "inline-flex items-center gap-1 md:flex md:flex-wrap md:max-w-4xl md:mx-auto"
+      className: "mark"
     }, /*#__PURE__*/React.createElement("span", {
-      className: "font-mono text-[10px] tracking-[0.2em] uppercase text-amber-500 mr-2"
-    }, "Jump to"), sections.map(s => /*#__PURE__*/React.createElement("button", {
+      className: "hand"
+    }, "Mahjong"), /*#__PURE__*/React.createElement("span", {
+      className: "sub"
+    }, "Monday")), /*#__PURE__*/React.createElement("div", {
+      className: "crest",
+      "aria-hidden": "true"
+    }, "M")), tab === 'learn' ? /*#__PURE__*/React.createElement("nav", {
+      className: "section-bar",
+      "aria-label": "Learn sections"
+    }, LEARN_SECTIONS.map((s, i) => /*#__PURE__*/React.createElement("button", {
       key: s.id,
-      onClick: () => scrollTo(s.id),
-      "aria-current": activeSection === s.id ? 'true' : undefined,
-      className: `font-mono text-[11px] px-2.5 py-1.5 rounded transition-all ${activeSection === s.id ? 'text-amber-300 bg-amber-700/25 ring-1 ring-amber-500/30' : 'text-stone-200/55 hover:bg-amber-700/10 hover:text-amber-300'}`
-    }, s.label)))), /*#__PURE__*/React.createElement("div", {
-      className: "max-w-3xl mx-auto px-5 md:px-8"
-    }, /*#__PURE__*/React.createElement("section", {
-      id: "overview",
-      className: "py-11 md:py-16 border-b border-white/[0.06]"
-    }, /*#__PURE__*/React.createElement(SectionHeader, {
-      tag: "01 \u2014 Overview",
-      title: "What Is American Mah Jongg?"
-    }), /*#__PURE__*/React.createElement(P, null, "American Mah Jongg is a tile-based game for ", /*#__PURE__*/React.createElement("strong", {
-      className: "text-stone-100 font-semibold"
-    }, "four players"), " that evolved from the Chinese game of Mahjong after its introduction to the United States in the 1920s. Today's American version is governed by the ", /*#__PURE__*/React.createElement("em", {
-      className: "text-amber-300 italic"
-    }, "National Mah Jongg League (NMJL)"), ", founded in 1937, and is distinctly different from its Chinese, Japanese, and other Asian counterparts."), /*#__PURE__*/React.createElement(P, null, "The defining feature of American Mah Jongg is the ", /*#__PURE__*/React.createElement("strong", {
-      className: "text-stone-100"
-    }, "annual card"), " \u2014 a scorecard issued each year by the NMJL listing the only valid winning hands for that year. Players must build one of these specific hands to win, making the game a unique blend of luck, pattern recognition, and tactical maneuvering."), /*#__PURE__*/React.createElement("div", {
-      className: "grid grid-cols-1 sm:grid-cols-2 gap-3.5 my-5"
-    }, /*#__PURE__*/React.createElement(InfoCard, {
-      title: "Key Facts",
-      items: ['4 players (3 possible)', '152 tiles in play', 'Annual NMJL card required', 'Jokers can substitute tiles', 'Play is counterclockwise']
-    }), /*#__PURE__*/React.createElement(InfoCard, {
-      title: "vs. Chinese Mahjong",
-      items: ['Uses joker tiles', 'Fixed hand patterns (card)', 'No melding of incomplete sets', 'Scoring is simpler (25/50 pts)', 'Charleston tile-passing ritual']
-    }))), /*#__PURE__*/React.createElement("section", {
-      id: "tiles",
-      className: "py-11 md:py-16 border-b border-white/[0.06]"
-    }, /*#__PURE__*/React.createElement(SectionHeader, {
-      tag: "02 \u2014 The Tiles",
-      title: "Know Your Tiles"
-    }), /*#__PURE__*/React.createElement(P, null, "A standard American Mah Jongg set contains ", /*#__PURE__*/React.createElement("strong", {
-      className: "text-stone-100"
-    }, "152 tiles"), " across several suits and honor categories. Understanding each tile type is essential before play begins."), /*#__PURE__*/React.createElement("div", {
-      className: "grid grid-cols-1 sm:grid-cols-2 gap-3.5 my-6"
-    }, [{
-      name: 'Bam (Bamboo)',
-      tiles: [['🀐'], ['🀑'], ['🀒'], ['🀓']],
-      desc: '1–9, depicted with bamboo stalks. The 1-bam is often a bird.'
-    }, {
-      name: 'Crack (Characters)',
-      tiles: [['🀇'], ['🀈'], ['🀉'], ['🀊']],
-      desc: '1–9, Chinese numerals with the character for "ten thousand."'
-    }, {
-      name: 'Dot (Circles)',
-      tiles: [['🀙'], ['🀚'], ['🀛'], ['🀜']],
-      desc: '1–9, shown as circular discs arranged on the tile.'
-    }, {
-      name: 'Winds',
-      tiles: [['🀀'], ['🀁'], ['🀂'], ['🀃']],
-      desc: 'East, South, West, North — 4 of each, 16 total.'
-    }, {
-      name: 'Dragons',
-      tiles: [['🀄', 'red'], ['🀅', 'green'], ['🀆', 'blue']],
-      desc: 'Red, Green, White (Soap) — 4 of each, 12 total.'
-    }, {
-      name: 'Flowers & Jokers',
-      tiles: [['🌸', 'red'], ['JKR', 'green']],
-      desc: '8 flowers and 8 jokers — jokers are wild within sets of 3+.'
-    }].map(cat => /*#__PURE__*/React.createElement("div", {
-      key: cat.name,
-      className: "bg-white/[0.04] border border-amber-700/20 rounded-lg p-4"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "font-mono text-[10px] tracking-[0.18em] uppercase text-amber-500 mb-2.5"
-    }, cat.name), /*#__PURE__*/React.createElement("div", {
-      className: "flex gap-1.5 flex-wrap mb-2"
-    }, cat.tiles.map(([t, c], i) => /*#__PURE__*/React.createElement("div", {
-      key: i,
-      className: "w-8 h-11 bg-amber-50 rounded border-2 border-amber-200/70 flex items-center justify-center shadow-sm select-none",
-      style: {
-        fontSize: t === 'JKR' ? '10px' : '17px',
-        fontFamily: t === 'JKR' ? 'monospace' : 'inherit',
-        color: c === 'red' ? '#b91c1c' : c === 'green' ? '#065f46' : c === 'blue' ? '#1d4ed8' : '#1c1917'
+      className: `seg ${learnSection === s.id ? 'active' : ''}`,
+      onClick: () => {
+        setLearnSection(s.id);
+        window.scrollTo({
+          top: 0,
+          behavior: 'instant'
+        });
       }
-    }, t))), /*#__PURE__*/React.createElement("div", {
-      className: "text-[13px] text-stone-200/55 italic leading-snug"
-    }, cat.desc)))), /*#__PURE__*/React.createElement(Callout, {
-      title: "Joker Rule"
-    }, "Jokers may substitute for any tile ", /*#__PURE__*/React.createElement("em", {
-      className: "text-amber-300 italic"
-    }, "within a set of three or more identical tiles"), " (pung, kong, or quint). Jokers ", /*#__PURE__*/React.createElement("strong", {
-      className: "text-stone-100"
-    }, "cannot"), " be used in pairs. A player may \"call\" a joker from an exposed meld if they hold the exact tile it represents."), /*#__PURE__*/React.createElement(Callout, {
-      title: "Common Mistake",
-      variant: "warning"
-    }, "Jokers ", /*#__PURE__*/React.createElement("strong", {
-      className: "text-stone-100"
-    }, "cannot"), " substitute in a pair. They only work in groups of 3 or more \u2014 this trips up players switching from other variants.")), /*#__PURE__*/React.createElement("section", {
-      id: "setup",
-      className: "py-11 md:py-16 border-b border-white/[0.06]"
-    }, /*#__PURE__*/React.createElement(SectionHeader, {
-      tag: "03 \u2014 Setup",
-      title: "Seating, Winds & The Wall"
-    }), /*#__PURE__*/React.createElement(SubHead, null, "Assigning Seats & Winds"), /*#__PURE__*/React.createElement(P, null, "Each player is assigned one of the four ", /*#__PURE__*/React.createElement("strong", {
-      className: "text-stone-100"
-    }, "wind positions"), ". The East wind player is the ", /*#__PURE__*/React.createElement("em", {
-      className: "text-amber-300 italic"
-    }, "dealer"), " for the first hand and has first pick of tiles. Winds rotate after each hand (or stay if East wins)."), /*#__PURE__*/React.createElement("div", {
-      className: "grid grid-cols-2 sm:grid-cols-4 gap-2.5 my-5"
-    }, [{
-      sym: '🀀',
-      name: 'East',
-      role: 'Dealer'
-    }, {
-      sym: '🀁',
-      name: 'South',
-      role: 'Left of East'
-    }, {
-      sym: '🀂',
-      name: 'West',
-      role: 'Across'
-    }, {
-      sym: '🀃',
-      name: 'North',
-      role: 'Right of East'
-    }].map(w => /*#__PURE__*/React.createElement("div", {
-      key: w.name,
-      className: "bg-white/[0.05] border border-amber-700/25 rounded-lg p-3 text-center"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "text-2xl mb-1"
-    }, w.sym), /*#__PURE__*/React.createElement("div", {
-      className: "font-mono text-[10px] tracking-wider uppercase text-amber-500"
-    }, w.name), /*#__PURE__*/React.createElement("div", {
-      className: "text-[12px] text-stone-200/50 mt-0.5"
-    }, w.role)))), /*#__PURE__*/React.createElement(SubHead, null, "Building the Wall"), /*#__PURE__*/React.createElement("ol", {
-      className: "list-none my-5"
-    }, /*#__PURE__*/React.createElement(Step, {
-      num: "1",
-      title: "Shuffle & Stack"
-    }, "Turn all tiles face down and mix thoroughly (\"washing\"). Each player stacks two rows of 19 tiles in front of them, forming four walls of a square."), /*#__PURE__*/React.createElement(Step, {
-      num: "2",
-      title: "Break the Wall"
-    }, "The dealer rolls two dice. Counting counterclockwise from the dealer, that player breaks the wall at the dice total. Dealing begins from the right side of the break."), /*#__PURE__*/React.createElement(Step, {
-      num: "3",
-      title: "Deal the Tiles"
-    }, "Deal counterclockwise: ", /*#__PURE__*/React.createElement("strong", {
-      className: "text-stone-100"
-    }, "3 tiles at a time for 4 rounds"), " (12 each), then one more to each player. East gets a 14th tile to start; others have 13.")), /*#__PURE__*/React.createElement(SubHead, null, "The Charleston"), /*#__PURE__*/React.createElement(P, null, "Before play begins, all players participate in the ", /*#__PURE__*/React.createElement("em", {
-      className: "text-amber-300 italic"
-    }, "Charleston"), " \u2014 a mandatory tile-passing ritual unique to American Mah Jongg that helps everyone improve their starting hand."), /*#__PURE__*/React.createElement("ol", {
-      className: "list-none my-5"
-    }, /*#__PURE__*/React.createElement(Step, {
-      num: "1",
-      title: "First Right"
-    }, "Each player simultaneously passes ", /*#__PURE__*/React.createElement("strong", {
-      className: "text-stone-100"
-    }, "3 tiles face-down"), " to the player on their right. You cannot look at incoming tiles before passing."), /*#__PURE__*/React.createElement(Step, {
-      num: "2",
-      title: "First Across"
-    }, "Pass 3 tiles to the player across from you."), /*#__PURE__*/React.createElement(Step, {
-      num: "3",
-      title: "First Left"
-    }, "Pass 3 tiles to the player on your left."), /*#__PURE__*/React.createElement(Step, {
-      num: "4",
-      title: "Second Charleston"
-    }, "Optional second round (left, across, right) if all agree. After that, a ", /*#__PURE__*/React.createElement("em", {
-      className: "text-amber-300 italic"
-    }, "courtesy pass"), " of 1\u20133 tiles may be offered to the player across.")), /*#__PURE__*/React.createElement(Callout, {
-      title: "Pro Tip"
-    }, "Pass tiles that don't fit ", /*#__PURE__*/React.createElement("em", {
-      className: "text-amber-300 italic"
-    }, "any"), " hand you're considering \u2014 flowers you don't need, lone tiles from suits you're abandoning. Pass with purpose, not just your \"worst\" tiles.")), /*#__PURE__*/React.createElement("section", {
-      id: "gameplay",
-      className: "py-11 md:py-16 border-b border-white/[0.06]"
-    }, /*#__PURE__*/React.createElement(SectionHeader, {
-      tag: "04 \u2014 Gameplay",
-      title: "How a Turn Works"
-    }), /*#__PURE__*/React.createElement(P, null, "After the Charleston, the dealer (East) discards one tile to begin play. The game proceeds counterclockwise. On your turn, you either draw a tile from the wall or claim a discarded tile."), /*#__PURE__*/React.createElement(SubHead, null, "Drawing from the Wall"), /*#__PURE__*/React.createElement(P, null, "If no one claims the previous discard, draw the next tile from the wall, add it to your hand (now 14 tiles), and then discard one face-up to the center, announcing its name."), /*#__PURE__*/React.createElement(SubHead, null, "Claiming a Discard"), /*#__PURE__*/React.createElement(P, null, "Any player may claim a discarded tile ", /*#__PURE__*/React.createElement("em", {
-      className: "text-amber-300 italic"
-    }, "before"), " the next player draws from the wall."), /*#__PURE__*/React.createElement("div", {
-      className: "grid grid-cols-1 sm:grid-cols-2 gap-3.5 my-5"
-    }, /*#__PURE__*/React.createElement(InfoCard, {
-      title: '"Mah Jongg!" Claim',
-      items: ['Any player may call any discard', 'Must complete a winning hand', 'Takes priority over all other claims', 'Game ends immediately']
-    }), /*#__PURE__*/React.createElement(InfoCard, {
-      title: "Regular Claim",
-      items: ['Must form a set of 3+ tiles', 'Must expose the complete set', 'Play jumps to the claimer', 'Cannot claim for a pair only']
-    })), /*#__PURE__*/React.createElement(Callout, {
-      title: "Exposed Melds",
-      variant: "warning"
-    }, "When you claim a discard, place the completed set ", /*#__PURE__*/React.createElement("strong", {
-      className: "text-stone-100"
-    }, "face-up"), " in front of you. Your hand is now partially exposed and cannot be rearranged for a different hand."), /*#__PURE__*/React.createElement(SubHead, null, "Joker Exchange"), /*#__PURE__*/React.createElement(P, null, "If an opponent's exposed meld contains a joker and you hold the exact tile it represents, you may swap your real tile for their joker on your turn. This gives you a wild card and removes one from them.")), /*#__PURE__*/React.createElement("section", {
-      id: "card",
-      className: "py-11 md:py-16 border-b border-white/[0.06]"
-    }, /*#__PURE__*/React.createElement(SectionHeader, {
-      tag: "05 \u2014 The Card",
-      title: "The NMJL Card"
-    }), /*#__PURE__*/React.createElement(P, null, "The ", /*#__PURE__*/React.createElement("em", {
-      className: "text-amber-300 italic"
-    }, "National Mah Jongg League Card"), " is the heart of the game. Published annually (usually in spring), it lists every valid winning hand for the year. You must build one of these exact hands \u2014 no improvising."), /*#__PURE__*/React.createElement(P, null, "Cards are purchased directly from the NMJL for a small fee. The card changes each year, keeping play fresh and requiring players to re-learn categories annually."), /*#__PURE__*/React.createElement(SubHead, null, "Common Hand Categories"), /*#__PURE__*/React.createElement(P, null, "While specifics change yearly, most cards include these recurring categories:"), /*#__PURE__*/React.createElement("div", {
-      className: "grid sm:grid-cols-2 gap-3 my-5"
-    }, /*#__PURE__*/React.createElement(HandCard, {
-      name: "2468 (Evens)",
-      value: "25 / 50 pts",
-      desc: "Built from even-numbered tiles (2, 4, 6, 8). Often pairs, pungs, and kongs of even numbers."
-    }), /*#__PURE__*/React.createElement(HandCard, {
-      name: "Like Numbers",
-      value: "25 / 50 pts",
-      desc: "Sets of the same number across all three suits \u2014 e.g., three 7s of bam, crack, and dot."
-    }), /*#__PURE__*/React.createElement(HandCard, {
-      name: "Winds & Dragons",
-      value: "25 / 50 pts",
-      desc: "Composed entirely of wind and dragon honors. Often closed (no exposed melds allowed)."
-    }), /*#__PURE__*/React.createElement(HandCard, {
-      name: "Consecutive Run",
-      value: "25 / 50 pts",
-      desc: "Tiles in ascending sequence \u2014 same suit, or mirrored across suits (e.g., 1\u20132\u20133 in bam and crack)."
-    }), /*#__PURE__*/React.createElement(HandCard, {
-      name: "Singles & Pairs",
-      value: "25 / 50 pts",
-      desc: "A hand built entirely of pairs \u2014 typically 7 pairs totaling 14 tiles. Elegant and challenging."
-    }), /*#__PURE__*/React.createElement(HandCard, {
-      name: "Flowers",
-      value: "25 / 50 pts",
-      desc: "Hands incorporating the 8 flower tiles. Flowers cannot receive joker substitutions."
-    })), /*#__PURE__*/React.createElement(SubHead, null, "Reading the Card"), /*#__PURE__*/React.createElement(P, null, "Each hand uses shorthand notation:"), /*#__PURE__*/React.createElement("ul", {
-      className: "list-none space-y-1.5 my-5"
-    }, [['FF', 'two Flowers (a pair)'], ['222', 'three 2s — a pung of one suit'], ['2222', 'four 2s — a kong'], ['22222', 'five 2s — a quint'], ['NEWS', 'North, East, West, South winds'], ['C', 'a closed hand — no claims allowed']].map(([code, meaning]) => /*#__PURE__*/React.createElement("li", {
-      key: code,
-      className: "flex gap-2.5 items-baseline flex-wrap text-[15px] text-stone-200/75"
-    }, /*#__PURE__*/React.createElement("code", {
-      className: "font-mono text-[13px] text-amber-500 bg-amber-700/10 px-2 py-0.5 rounded whitespace-nowrap"
-    }, code), /*#__PURE__*/React.createElement("span", null, meaning)))), /*#__PURE__*/React.createElement(Callout, {
-      title: "Closed vs. Open Hands"
-    }, "Hands marked ", /*#__PURE__*/React.createElement("strong", {
-      className: "text-stone-100"
-    }, "C"), " are ", /*#__PURE__*/React.createElement("em", {
-      className: "text-amber-300 italic"
-    }, "closed"), " \u2014 you cannot claim any discard. Every tile must be drawn from the wall. Closed hands are harder but often worth more points.")), /*#__PURE__*/React.createElement("section", {
-      id: "winning",
-      className: "py-11 md:py-16 border-b border-white/[0.06]"
-    }, /*#__PURE__*/React.createElement(SectionHeader, {
-      tag: "06 \u2014 Winning",
-      title: "Declaring Mah Jongg"
-    }), /*#__PURE__*/React.createElement(P, null, "You win by completing a valid hand from the card using exactly ", /*#__PURE__*/React.createElement("strong", {
-      className: "text-stone-100"
-    }, "14 tiles"), " (13 in hand + 1 final tile). The final tile may come from the wall or a discard."), /*#__PURE__*/React.createElement(SubHead, null, "Calling \"Mah Jongg!\""), /*#__PURE__*/React.createElement("ol", {
-      className: "list-none my-5"
-    }, /*#__PURE__*/React.createElement(Step, {
-      num: "1",
-      title: "Announce"
-    }, "Call \"Mah Jongg!\" immediately when you claim a discard or draw the winning tile \u2014 before the next player draws."), /*#__PURE__*/React.createElement(Step, {
-      num: "2",
-      title: "Reveal"
-    }, "Lay all 14 tiles face-up and point to the matching hand on the NMJL card. Your hand must match exactly \u2014 right tiles, right quantities, right suits."), /*#__PURE__*/React.createElement(Step, {
-      num: "3",
-      title: "Collect Payment"
-    }, "All players verify the hand, then payment is settled per the rules below.")), /*#__PURE__*/React.createElement(SubHead, null, "Scoring"), /*#__PURE__*/React.createElement(P, null, "American Mah Jongg scoring is refreshingly simple. Each hand has two values: one for an ", /*#__PURE__*/React.createElement("em", {
-      className: "text-amber-300 italic"
-    }, "open"), " hand and one for a ", /*#__PURE__*/React.createElement("em", {
-      className: "text-amber-300 italic"
-    }, "closed"), " hand \u2014 typically ", /*#__PURE__*/React.createElement("strong", {
-      className: "text-stone-100"
-    }, "25 and 50 points"), ", with some special hands worth more."), /*#__PURE__*/React.createElement("div", {
-      className: "grid grid-cols-1 sm:grid-cols-2 gap-3.5 my-5"
-    }, /*#__PURE__*/React.createElement(InfoCard, {
-      title: "Winner Receives",
-      items: ['Points from all 3 opponents', 'Double from the discarder', 'Or equal from all if self-draw', 'Joker-only hands: full value']
-    }), /*#__PURE__*/React.createElement(InfoCard, {
-      title: "Penalties",
-      items: ['False Mah Jongg: pay all players', 'Dead hand: cannot win', 'Calling wrong tile: penalty', 'Wall game: no winner, redeal']
-    })), /*#__PURE__*/React.createElement(Callout, {
-      title: "False Declaration",
-      variant: "warning"
-    }, "Calling \"Mah Jongg!\" with an invalid hand is a ", /*#__PURE__*/React.createElement("strong", {
-      className: "text-stone-100"
-    }, "false declaration"), ". You must pay each player the value of the hand you claimed, and the game continues without you.")), /*#__PURE__*/React.createElement("section", {
-      id: "etiquette",
-      className: "py-11 md:py-16 border-b border-white/[0.06]"
-    }, /*#__PURE__*/React.createElement(SectionHeader, {
-      tag: "07 \u2014 Etiquette",
-      title: "Table Etiquette"
-    }), /*#__PURE__*/React.createElement(P, null, "American Mah Jongg has strong social conventions developed over nearly a century. Respecting them keeps games friendly and fair."), /*#__PURE__*/React.createElement("div", {
-      className: "grid grid-cols-1 sm:grid-cols-2 gap-3.5 my-5"
-    }, /*#__PURE__*/React.createElement(InfoCard, {
-      title: "Always Do",
-      items: ['Announce each discard by name', 'Pass Charleston tiles face-down', 'Wait for the discard name before claiming', 'Expose melds immediately', 'Keep the card visible to all']
-    }), /*#__PURE__*/React.createElement(InfoCard, {
-      title: "Never Do",
-      items: ["Look at others' tiles", 'Give unsolicited mid-game advice', 'Delay a discard unnecessarily', 'Claim and then change your mind', 'Discard after calling Mah Jongg']
-    })), /*#__PURE__*/React.createElement(SubHead, null, "Timing a Claim"), /*#__PURE__*/React.createElement(P, null, "After a discard, there is a brief window to claim. Most groups allow a moment of silence \u2014 once the next player touches a wall tile, the previous discard is dead."), /*#__PURE__*/React.createElement(SubHead, null, "The Dead Hand"), /*#__PURE__*/React.createElement(P, null, "A hand becomes ", /*#__PURE__*/React.createElement("em", {
-      className: "text-amber-300 italic"
-    }, "dead"), " if you call a tile you don't actually need, expose a meld not on your card, or commit certain procedural errors. A dead hand cannot win but must still discard normally each turn.")), /*#__PURE__*/React.createElement("section", {
-      id: "strategy",
-      className: "py-11 md:py-16 border-b border-white/[0.06]"
-    }, /*#__PURE__*/React.createElement(SectionHeader, {
-      tag: "08 \u2014 Strategy",
-      title: "Strategy & Tips"
-    }), /*#__PURE__*/React.createElement(SubHead, null, "Choose 2\u20133 Target Hands"), /*#__PURE__*/React.createElement(P, null, "After the Charleston, identify ", /*#__PURE__*/React.createElement("strong", {
-      className: "text-stone-100"
-    }, "two or three hands"), " your tiles could build. Keep flexibility early; narrow your focus as tiles emerge. Committing too early is the most common beginner mistake."), /*#__PURE__*/React.createElement(SubHead, null, "Tile Counting"), /*#__PURE__*/React.createElement(P, null, "There are exactly ", /*#__PURE__*/React.createElement("strong", {
-      className: "text-stone-100"
-    }, "4 of each suit tile"), " (plus 8 jokers). Track discards mentally. If three 6-bam have been discarded, the fourth is either in the wall, in someone's hand, or covered by a joker \u2014 that changes whether a 6-bam hand is realistic."), /*#__PURE__*/React.createElement(SubHead, null, "Watch the Discards"), /*#__PURE__*/React.createElement(P, null, "Discards tell a story. If a player keeps passing on dragons, they're not building Winds & Dragons. If they claim two tiles in one suit, avoid feeding that suit further."), /*#__PURE__*/React.createElement(SubHead, null, "Joker Management"), /*#__PURE__*/React.createElement(P, null, "Jokers are powerful but finite. Save them for the ", /*#__PURE__*/React.createElement("em", {
-      className: "text-amber-300 italic"
-    }, "rarest"), " tiles you need, not common ones. A joker standing in for a 5-dot early on may be better swapped when you draw the real 5-dot \u2014 freeing the joker for tougher slots later."), /*#__PURE__*/React.createElement(SubHead, null, "Defensive Discards"), /*#__PURE__*/React.createElement(P, null, "When you're far from winning, choose ", /*#__PURE__*/React.createElement("em", {
-      className: "text-amber-300 italic"
-    }, "safe discards"), " \u2014 tiles already discarded by others, or from suits no one is collecting. Don't feed an opponent who's clearly close."), /*#__PURE__*/React.createElement(SubHead, null, "Charleston Strategy"), /*#__PURE__*/React.createElement(P, null, "The Charleston is your best chance to shape your hand. Drop entire suits if you can. Stay flexible early \u2014 over-committing before the Charleston ends limits your options."), /*#__PURE__*/React.createElement(Callout, {
-      title: "For New Players"
-    }, "Don't try to memorize the entire card at once. Pick ", /*#__PURE__*/React.createElement("strong", {
-      className: "text-stone-100"
-    }, "three or four hand categories"), " you understand well and focus on those. Depth beats breadth."))), /*#__PURE__*/React.createElement("footer", {
-      className: "text-center py-9 px-5 border-t border-amber-700/15"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "text-amber-500 text-lg tracking-[0.4em] opacity-50 mb-3"
-    }, "\xB7 \xB7 \xB7"), /*#__PURE__*/React.createElement("p", {
-      className: "font-mono text-[10px] tracking-wider text-stone-200/30 uppercase leading-relaxed"
-    }, "American Mah Jongg Definitive Guide", /*#__PURE__*/React.createElement("br", null), "NMJL Card required for current-year hands \xB7 nmjl.com")));
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "num"
+    }, String(i + 1).padStart(2, '0')), s.label))) : null, /*#__PURE__*/React.createElement("main", {
+      className: "main",
+      ref: mainRef
+    }, tab === 'learn' && ActiveLearn ? /*#__PURE__*/React.createElement(ActiveLearn.Comp, {
+      goLearn: jumpToLearn,
+      goPractice: () => switchTab('practice')
+    }) : null, tab === 'practice' ? /*#__PURE__*/React.createElement(PracticeScreen, null) : null, tab === 'cheat' ? /*#__PURE__*/React.createElement(CheatSheet, null) : null), /*#__PURE__*/React.createElement("nav", {
+      className: "tabbar",
+      "aria-label": "Main"
+    }, /*#__PURE__*/React.createElement("button", {
+      className: `tab ${tab === 'learn' ? 'active' : ''}`,
+      onClick: () => switchTab('learn')
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "glyph"
+    }, /*#__PURE__*/React.createElement(TabIcon, {
+      name: "learn"
+    })), "Learn"), /*#__PURE__*/React.createElement("button", {
+      className: `tab ${tab === 'practice' ? 'active' : ''}`,
+      onClick: () => switchTab('practice')
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "glyph"
+    }, /*#__PURE__*/React.createElement(TabIcon, {
+      name: "practice"
+    })), "Practice"), /*#__PURE__*/React.createElement("button", {
+      className: `tab ${tab === 'cheat' ? 'active' : ''}`,
+      onClick: () => switchTab('cheat')
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "glyph"
+    }, /*#__PURE__*/React.createElement(TabIcon, {
+      name: "cheat"
+    })), "Cheat"), /*#__PURE__*/React.createElement("button", {
+      className: "tab",
+      onClick: () => {
+        switchTab('learn');
+        setLearnSection('overview');
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "glyph"
+    }, /*#__PURE__*/React.createElement(TabIcon, {
+      name: "home"
+    })), "Top")));
   }
-  ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(AmericanMahjongGuide, null));
+  ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));
 </script>
 </body>
 </html>
